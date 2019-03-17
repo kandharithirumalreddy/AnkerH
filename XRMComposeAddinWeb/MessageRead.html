@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <title></title>
+    <script src="Scripts/jquery-1.9.1.js" type="text/javascript"></script>
+    <script src="Scripts/popper.min.js" type="text/javascript"></script>
+    <script src="Scripts/bootstrap.bundle.min.js" type="text/javascript"></script>
+
+    <!-- For the JavaScript APIs for Office, go to https://aka.ms/officejs-overview to learn more. -->
+    <script src="https://appsforoffice.microsoft.com/lib/beta/hosted/office.js" type="text/javascript"></script>
+
+    <!-- To enable offline debugging using a local reference to Office.js, use: -->
+    <!-- <script src="Scripts/Office/MicrosoftAjax.js" type="text/javascript"></script>  -->
+    <!-- <script src="Scripts/Office/1/office.js" type="text/javascript"></script>  -->
+    <!--<script src="Scripts/authconfig.js" type="text/javascript"></script>
+    <script src="Scripts/office.helpers.js" type="text/javascript"></script>-->
+    <script src="MessageRead.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="Content/Bootstrap/bootstrap.min.css" />
+    <link rel="stylesheet" href="MessageRead.css" />
+</head>
+<body>
+    <div class="container col-sm">
+        <div class="alert alert-success" role="alert" id="asuccess" style="display:none"></div>
+        <div class="alert alert-danger" role="alert" id="afailure" style="display:none"></div>
+        <div class="form-group">
+            <label for="drpstatus">Status</label>
+            <select class="form-control" id="drpstatus">
+                <option value="">-Vælg-</option>
+                <option value="Igangværende" selected>Igangværende</option>
+                <option value="1-5 års sager">1-5 års sager</option>
+                <option value="Afsluttet">Afsluttet</option>
+                <option value="Tilbud">Tilbud</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="drpcases">Sager</label>
+            <select class="form-control" id="drpcases">
+                <option value="" selected>-Vælg-</option>
+            </select>
+            <small id="sitecollectionhelp" class="form-text text-muted">Vælg Sager</small>
+        </div>
+        <div class="form-group" id="dvSaveEmail" style="display:none">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="" id="chkSaveEmail" />
+                    Gem Email
+                </label>
+            </div>
+            <div id="dvcategory" style="display:none">
+                <label for="drpcategories">Kategori</label>
+                <select class="form-control" id="drpcategories">
+                    <option value="" selected>-Vælg-</option>
+
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group" id="dvSaveAttachments" style="display:none">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" value="" id="chkSaveAttachment" />
+                    Gem Vedhæftning(er)
+                </label>
+            </div>
+            <div id="dvFolder" style="display:none">
+                <label for="drpfolders">Mapper</label>
+                <select class="form-control" id="drpfolders">
+                    <option value="" selected>-Vælg-</option>
+                </select>
+                <br />
+                <select class="form-control" id="drpfolders1" style="display:none">
+                    <option value="" selected>-Vælg-</option>
+                </select>
+                <br />
+                <select class="form-control" id="drpfolders2" style="display:none">
+                    <option value="" selected>-Vælg-</option>
+                </select>
+                <br />
+                <select class="form-control" id="drpfolders3" style="display:none">
+                    <option value="" selected>-Vælg-</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="savesection" style="display:none">
+            <div> <button type="submit" class="btn btn-primary float-right" id="btnSave">Gem</button></div>
+        </div>
+    </div>
+
+    <div class="loader" style="display:none"></div>
+</body>
+</html>

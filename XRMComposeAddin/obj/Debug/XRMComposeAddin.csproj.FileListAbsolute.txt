@@ -1,0 +1,4 @@
+D:\UpWorks\XRMComposeAddin\XRMComposeAddin\obj\Debug\XRMComposeAddin.csprojAssemblyReference.cache
+D:\UpWorks\XRMComposeAddin\XRMComposeAddin\obj\Debug\XRMComposeAddin.csproj.CoreCompileInputs.cache
+C:\Users\Thirumal\Documents\XRMComposeAddin\XRMComposeAddin\XRMComposeAddin\bin\Debug\XRMComposeAddin.dll.config
+C:\Users\Thirumal\Documents\XRMComposeAddin\XRMComposeAddin\XRMComposeAddin\obj\Debug\XRMComposeAddin.csproj.CoreCompileInputs.cache

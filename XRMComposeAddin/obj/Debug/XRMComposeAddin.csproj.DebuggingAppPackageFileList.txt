@@ -1,0 +1,2 @@
+bin\Debug\OfficeAppManifests\XRMComposeAddinManifest.xml
+C:\Users\Thirumal\Documents\XRMComposeAddin\XRMComposeAddin\XRMComposeAddin\bin\Debug\XRMComposeAddin.debugapp
