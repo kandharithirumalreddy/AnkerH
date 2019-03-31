@@ -228,9 +228,14 @@
             data: JSON.stringify(caseInfo)
         }).done(function (data) {
             console.log("Fetched the folders");
-            //Office.context.ui.closeContainer();
-            $("#" + control).html("");
-            $("#" + control).append('<option value="" selected>-Vælg-</option>');
+            //if (level !== 1) {
+            //    var select = '<br/><select class="form-control" id="drpfolders' + caseInfo.ID + '"></select>';
+            //    $('#dropdown').append(select);
+            //    control = "drpfolders"+caseInfo.ID;
+            //}
+            ////Office.context.ui.closeContainer();
+            //$("#" + control).html("");
+            //$("#" + control).append('<option value="" selected>-Vælg-</option>');
 
             $.each(data, function (index, value){
                 $("#" + control).append('<option value="' + value.Id + '">' + value.Name + '</option>');
@@ -245,10 +250,16 @@
             $(".loader").css("display", "none");
         });
     }
+    Date.prototype.addHours = function (h) {
+        this.setHours(this.getHours() + h);
+        return this;
+    }
 
     function saveEmail(token) {
         $(".loader").css("display", "block");
         var item = Office.context.mailbox.item;
+        var datetimecreated = new Date(item.dateTimeCreated).addHours(8);
+        //var datetimecreated = new Date(item.dateTimeModified);
         var emailInfo = {
             Title: item.subject,
             Message:msgbody,
@@ -257,7 +268,7 @@
             CategoryLookupId: $("#drpcategories").find("option:selected").val(),
             RelatedItemListId: "Lists/Cases",
             RelatedItemId: $("#drpcases").find("option:selected").val(),
-            Received: item.dateTimeCreated,
+            Received: datetimecreated,
             ConversationId: item.conversationId,
             ConversationTopic: item.subject,
             InOut: mailMode
@@ -336,7 +347,8 @@
         }).fail(function (error) {
             console.log("Fail to save the Attachments");
             console.log(error);
-            $("#afailure").text("Failed to save the attachments").css("display", "block");
+            var errormessage = JSON.parse(error.responseText);
+            $("#afailure").text(errormessage.Message).css("display", "block");
             $(".loader").css("display", "none");
         });
     }

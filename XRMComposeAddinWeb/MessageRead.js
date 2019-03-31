@@ -72,6 +72,9 @@
           $("#btnSave").click(function () {
               if ($("#chkSaveEmail").is(":checked")) {
                   saveEmail(ssoToken);
+              } else {
+                  $("#afailure").text("Please select the Save Email").css("display", "block");
+                  $(".loader").css("display", "none");
               }
           });
           //saveEmail(ssoToken);
@@ -94,7 +97,6 @@
 
     function getAccessToken() {
         if (Office.context.auth !== undefined && Office.context.auth.getAccessTokenAsync !== undefined) {
-            debugger
             Office.context.auth.getAccessTokenAsync(function (result) {
                 if (result.status === "succeeded") {
                     console.log("token was fetched ");
@@ -228,9 +230,14 @@
             data: JSON.stringify(caseInfo)
         }).done(function (data) {
             console.log("Fetched the folders");
-            //Office.context.ui.closeContainer();
-            $("#" + control).html("");
-            $("#" + control).append('<option value="" selected>-Vælg-</option>');
+            //if (level !== 1) {
+            //    var select = '<br/><select class="form-control" id="drpfolders' + caseInfo.ID + '"></select>';
+            //    $('#dropdown').append(select);
+            //    control = "drpfolders"+caseInfo.ID;
+            //}
+            ////Office.context.ui.closeContainer();
+            //$("#" + control).html("");
+            //$("#" + control).append('<option value="" selected>-Vælg-</option>');
 
             $.each(data, function (index, value){
                 $("#" + control).append('<option value="' + value.Id + '">' + value.Name + '</option>');
@@ -245,10 +252,17 @@
             $(".loader").css("display", "none");
         });
     }
+    Date.prototype.addHours = function (h) {
+        this.setHours(this.getHours() + h);
+        return this;
+    }
 
     function saveEmail(token) {
         $(".loader").css("display", "block");
         var item = Office.context.mailbox.item;
+        //var gmt = new Date(item.dateTimeCreated).getTimezoneOffset();
+        var datetimecreated = new Date(item.dateTimeCreated).addHours(8);
+        //var datetimecreated = new Date(item.dateTimeModified);
         var emailInfo = {
             Title: item.subject,
             Message:msgbody,
@@ -257,7 +271,7 @@
             CategoryLookupId: $("#drpcategories").find("option:selected").val(),
             RelatedItemListId: "Lists/Cases",
             RelatedItemId: $("#drpcases").find("option:selected").val(),
-            Received: item.dateTimeCreated,
+            Received: datetimecreated,
             ConversationId: item.conversationId,
             ConversationTopic: item.subject,
             InOut: mailMode
@@ -293,6 +307,11 @@
     function saveAttachment(token) {
         var attachments = Office.context.mailbox.item.attachments;
         var attachmentIds = [];
+        if (attachments.length == 0) {
+            $("#afailure").text("There is no attachment found in the mail.Please unselect the attachment option").css("display", "block");
+            $(".loader").css("display", "none");
+            return false;
+        }
         for (var i = 0; i < attachments.length; i++) {
             attachmentIds.push(Office.context.mailbox.convertToRestId(attachments[i].id, Office.MailboxEnums.RestVersion.v2_0));
         }

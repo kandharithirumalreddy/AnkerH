@@ -96,18 +96,39 @@ namespace XRMComposeAddinWeb.Controllers
                 foreach (string attachmentId in request.attachmentIds)
                 {
                     var attachment = await graphClient.Me.Messages[request.messageId].Attachments[attachmentId].Request().GetAsync() as FileAttachment;
+                    string caseFolderName = MakeFileNameValid(request.caseFolderName);
                     if (attachment.IsInline == false)
                     {
+                      // MemoryStream fileStream = new MemoryStream(attachment.ContentBytes);
                         if (attachment.Size < (4 * 1024 * 1024))
                         {
-                            MemoryStream fileStream = new MemoryStream(attachment.ContentBytes);
-                            string caseFolderName = MakeFileNameValid(request.caseFolderName);
-                            bool success = await SaveFileToSharePoint(graphClient, attachment.Name, fileStream, driveid, request.folderName, caseFolderName);
-                            if (!success)
+                            using (MemoryStream fileStream = new MemoryStream(attachment.ContentBytes))
                             {
-                                return BadRequest("Failed to upload the file to the Sharepoint document Library");
+                               // string caseFolderName = MakeFileNameValid(request.caseFolderName);
+                                bool success = await SaveFileToSharePoint(graphClient, attachment.Name, fileStream, driveid, request.folderName, caseFolderName);
+                                if (!success)
+                                {
+                                    return BadRequest("Failed to upload the file to the Sharepoint document Library");
+                                }
                             }
                         }
+                        else if (attachment.Size > (4 * 1024 * 1024))
+                        {
+                            try
+                            {
+                                //  List<ResultsItem> items = new List<ResultsItem>();
+                                // Create the upload session. The access token is no longer required as you have session established for the upload.  
+                                //string caseFolderName = MakeFileNameValid(request.caseFolderName);
+                               bool success= await SaveLargeFileToSharePoint(graphClient,attachment.ContentBytes ,attachment.Name,driveid, request.folderName, caseFolderName);
+                                if (!success)
+                                {
+                                    return BadRequest("Failed to upload the file to the Sharepoint document Library");
+                                }
+                            }
+                            catch (Exception ex) {  }
+
+                        }
+
                         else
                         {
                             // https://developer.microsoft.com/en-us/graph/docs/api-reference/v1.0/api/item_createuploadsession
@@ -115,6 +136,10 @@ namespace XRMComposeAddinWeb.Controllers
                             // https://github.com/microsoftgraph/aspnet-snippets-sample/blob/master/Graph-ASPNET-46-Snippets/Microsoft%20Graph%20ASPNET%20Snippets/Models/FilesService.cs
                             return BadRequest("Attachments with size >4MB are restricted from uploading");
                         }
+                    }
+                    else
+                    {
+                        return BadRequest("There is no attachment found in the mail.Please unselect the attachment option");
                     }
 
                 }
@@ -145,7 +170,64 @@ namespace XRMComposeAddinWeb.Controllers
 
             return true;
         }
+        private async Task<bool> SaveLargeFileToSharePoint(GraphServiceClient client,byte[] contentBytes, string fileName, string driveId, string foldername, string caseFolderName)
+        {
+            using (MemoryStream fileStream = new MemoryStream(contentBytes))
+            {
+                try
+                {
+                    string path = string.Empty;
+                   
+                    if (!string.IsNullOrEmpty(foldername))
+                    {
+                         path = $"{caseFolderName}/{foldername}/{MakeFileNameValid(fileName)}";
+                    }
+                    else
+                    {
+                         path = $"{caseFolderName}/{MakeFileNameValid(fileName)}";
+                    }
+                    UploadSession uploadSession = await client.Drives[driveId].Root.ItemWithPath(path).CreateUploadSession().Request().PostAsync();
 
+                    int maxChunkSize = 320 * 1024; // 320 KB - Change this to your chunk size. 5MB is the default.
+                    ChunkedUploadProvider provider = new ChunkedUploadProvider(uploadSession, client, fileStream, maxChunkSize);
+
+                    // Set up the chunk request necessities.
+                    IEnumerable<UploadChunkRequest> chunkRequests = provider.GetUploadChunkRequests();
+                    byte[] readBuffer = new byte[maxChunkSize];
+                    List<Exception> trackedExceptions = new List<Exception>();
+                    DriveItem uploadedFile = null;
+
+                    // Upload the chunks.
+                    foreach (var request1 in chunkRequests)
+                    {
+                        // Do your updates here: update progress bar, etc.
+                        // ...
+                        // Send chunk request
+                        UploadChunkResult result = await provider.GetChunkRequestResponseAsync(request1, readBuffer, trackedExceptions);
+
+                        if (result.UploadSucceeded)
+                        {
+                            uploadedFile = result.ItemResponse;
+
+                        }
+                    }
+
+
+                    // Check that upload succeeded.
+                    if (uploadedFile == null)
+                    {
+                        // Retry the upload
+                        // ...
+                    }
+                    return (uploadedFile != null);
+                }
+                catch (ServiceException)
+                {
+                    return false;
+                }
+            }
+        }
+    
         private string MakeFileNameValid(string originalFileName)
         {
             char[] invalidChars = Path.GetInvalidFileNameChars();

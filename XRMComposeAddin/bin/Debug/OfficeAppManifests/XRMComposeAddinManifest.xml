@@ -17,8 +17,8 @@
   <ProviderName>ankerhansen</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
   <!-- The display name of your add-in. Used on the store and various places of the Office UI such as the add-ins dialog. -->
-  <DisplayName DefaultValue="Gem til SharePoint" />
-  <Description DefaultValue="Gem til SharePoint"/>
+  <DisplayName DefaultValue="Save to SharePoint Test" />
+  <Description DefaultValue="Save to SharePoint Test"/>
   <IconUrl DefaultValue="https://localhost:44328/Images/icon64.png"/>
 
   <SupportUrl DefaultValue="http://www.contoso.com" />
