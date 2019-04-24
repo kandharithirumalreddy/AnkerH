@@ -3,3 +3,6 @@ D:\UpWorks\XRMComposeAddin\XRMComposeAddin\obj\Debug\XRMComposeAddin.csproj.Core
 C:\Users\Thirumal\Documents\XRMComposeAddin\XRMComposeAddin\XRMComposeAddin\bin\Debug\XRMComposeAddin.dll.config
 C:\Users\Thirumal\Documents\XRMComposeAddin\XRMComposeAddin\XRMComposeAddin\obj\Debug\XRMComposeAddin.csproj.CoreCompileInputs.cache
 C:\Users\Thirumal\Documents\XRMComposeAddin\XRMComposeAddin\XRMComposeAddin\obj\Debug\XRMComposeAddin.csprojAssemblyReference.cache
+C:\Users\Thirumal\Desktop\Thirumal_office\AH\AnkerH\XRMComposeAddin\bin\Debug\XRMComposeAddin.dll.config
+C:\Users\Thirumal\Desktop\Thirumal_office\AH\AnkerH\XRMComposeAddin\obj\Debug\XRMComposeAddin.csprojAssemblyReference.cache
+C:\Users\Thirumal\Desktop\Thirumal_office\AH\AnkerH\XRMComposeAddin\obj\Debug\XRMComposeAddin.csproj.CoreCompileInputs.cache
