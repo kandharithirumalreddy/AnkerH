@@ -21,5 +21,6 @@ namespace XRMComposeAddinWeb.Models
         public string ConversationId { get; set; }
         public string ConversationTopic { get; set; }
         public string RelatedItemId { get; set; }
+        public string messageid { get; set; }
     }
 }

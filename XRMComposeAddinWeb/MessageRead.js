@@ -274,7 +274,8 @@
             Received: datetimecreated,
             ConversationId: item.conversationId,
             ConversationTopic: item.subject,
-            InOut: mailMode
+            InOut: mailMode,
+            messageid: Office.context.mailbox.convertToRestId(Office.context.mailbox.item.itemId, Office.MailboxEnums.RestVersion.v2_0)
         };
 
         $.ajax({
