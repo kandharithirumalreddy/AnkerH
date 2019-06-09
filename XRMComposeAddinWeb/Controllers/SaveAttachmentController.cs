@@ -137,10 +137,10 @@ namespace XRMComposeAddinWeb.Controllers
                             return BadRequest("Attachments with size >4MB are restricted from uploading");
                         }
                     }
-                    else
-                    {
-                        return BadRequest("There is no attachment found in the mail.Please unselect the attachment option");
-                    }
+                    //else
+                    //{
+                    //    return BadRequest("There is no attachment found in the mail.Please unselect the attachment option");
+                    //}
 
                 }
             }

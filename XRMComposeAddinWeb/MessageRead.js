@@ -308,11 +308,11 @@
     function saveAttachment(token) {
         var attachments = Office.context.mailbox.item.attachments;
         var attachmentIds = [];
-        if (attachments.length == 0) {
-            $("#afailure").text("There is no attachment found in the mail.Please unselect the attachment option").css("display", "block");
-            $(".loader").css("display", "none");
-            return false;
-        }
+        //if (attachments.length == 0) {
+        //    $("#afailure").text("There is no attachment found in the mail.Please unselect the attachment option").css("display", "block");
+        //    $(".loader").css("display", "none");
+        //    return false;
+        //}
         for (var i = 0; i < attachments.length; i++) {
             attachmentIds.push(Office.context.mailbox.convertToRestId(attachments[i].id, Office.MailboxEnums.RestVersion.v2_0));
         }
