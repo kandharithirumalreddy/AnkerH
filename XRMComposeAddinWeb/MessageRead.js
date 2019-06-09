@@ -261,7 +261,7 @@
         $(".loader").css("display", "block");
         var item = Office.context.mailbox.item;
         //var gmt = new Date(item.dateTimeCreated).getTimezoneOffset();
-        var datetimecreated = new Date(item.dateTimeCreated).addHours(9);
+        var datetimecreated = new Date(item.dateTimeCreated).toUTCString();
         //var datetimecreated = new Date(item.dateTimeModified);
         var emailInfo = {
             Title: item.subject,
