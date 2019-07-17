@@ -202,7 +202,7 @@
         var id = $("#drpcases").find("option:selected").val();
         var foldername = "";
         if (level === 1) {
-            foldername = title + "-" + id;
+            foldername = id;
         }
         else if (level === 2) {
             foldername = caseFolderName + "/" + $("#drpfolders").find("option:selected").text();
