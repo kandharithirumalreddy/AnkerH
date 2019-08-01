@@ -206,6 +206,33 @@
             </ExtensionPoint>
             <!-- Go to http://aka.ms/ExtensionPointsCommands to learn how to add more Extension Points: MessageRead, AppointmentOrganizer, AppointmentAttendee -->
           </DesktopFormFactor>
+          <MobileFormFactor>
+            <FunctionFile resid="functionFile" />
+            <ExtensionPoint xsi:type="MobileMessageReadCommandSurface">
+              <Group id="mobileMsgRead">
+                <Label resid="groupLabel" />
+                <Control xsi:type="MobileButton" id="TaskPaneBtn">
+                  <Label resid="paneReadButtonLabel" />
+                  <Icon xsi:type="bt:MobileIconList">
+                    <bt:Image size="25" scale="1" resid="icon16" />
+                    <bt:Image size="25" scale="2" resid="icon16" />
+                    <bt:Image size="25" scale="3" resid="icon16" />
+
+                    <bt:Image size="32" scale="1" resid="icon16" />
+                    <bt:Image size="32" scale="2" resid="icon16" />
+                    <bt:Image size="32" scale="3" resid="icon16" />
+
+                    <bt:Image size="48" scale="1" resid="icon16" />
+                    <bt:Image size="48" scale="2" resid="icon16" />
+                    <bt:Image size="48" scale="3" resid="icon16" />
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <SourceLocation resid="messageReadTaskPaneUrl" />
+                  </Action>
+                </Control>
+              </Group>
+            </ExtensionPoint>
+          </MobileFormFactor>
         </Host>
       </Hosts>
 
