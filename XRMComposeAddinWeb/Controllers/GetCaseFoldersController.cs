@@ -15,11 +15,13 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using XRMComposeAddinWeb.Models;
 using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace XRMComposeAddinWeb.Controllers
 {
     public class GetCaseFoldersController : ApiController
     {
+        private HttpClient _saveHttpClient = new HttpClient();
         [HttpPost]
         public async Task<IHttpActionResult> Post([FromBody]CaseInfo request)
         {
@@ -97,8 +99,8 @@ namespace XRMComposeAddinWeb.Controllers
                 //new QueryOption("search","contentclass:STS_Site")
                 List<QueryOption> options = new List<QueryOption>()
                 {
-                    new QueryOption("filter","folder ne null"),
-                    new QueryOption("select","id,name,webUrl")
+                    new QueryOption("$filter","folder ne null"),
+                    new QueryOption("$select","id,name,webUrl")
                 };
 
                 //var libraryfolders = await graphClient.Drives[driveid].Root.Children.Request(options).GetAsync();
@@ -106,8 +108,9 @@ namespace XRMComposeAddinWeb.Controllers
                 string caseFolderName = driveinfo.CaseFolderName;
                 if (driveinfo.Level == "1")
                 {
-                    var casefolders = await graphClient.Drives[driveid].Root.Children.Request(options).GetAsync();
-                    caseFolderName = GetCaseFolderName(casefolders, driveinfo.ID);
+                    caseFolderName = await GetCaseFolderSharepoint(driveinfo.ID);
+                    //var casefolders = await graphClient.Drives[driveid].Root.Children.Request(options).GetAsync();
+                    //caseFolderName = GetCaseFolderName(casefolders, driveinfo.ID);
                 }
 
                 IDriveItemChildrenCollectionPage libraryfolders;
@@ -158,5 +161,41 @@ namespace XRMComposeAddinWeb.Controllers
 
             return caseFolderName;
         }
+
+        private async Task<string> GetCaseFolderSharepoint(string itemid)
+        {
+            //string siteUrl = "https://ankerhan.sharepoint.com/sites/Sager";
+            //OfficeDevPnP.Core.AuthenticationManager authMgr = new OfficeDevPnP.Core.AuthenticationManager();
+            //using (var cc = authMgr.GetAppOnlyAuthenticatedContext(siteUrl, "50cd26dc-9a11-45cc-a6b1-90cbec596642", "fnpneN2ha5UPVRqIUGn6a0rukztKtPMOyJX2dLnt2kI"))
+            //{
+            //    cc.Load(cc.Web, p => p.Title);
+            //    cc.ExecuteQuery();
+            //    Console.WriteLine(cc.Web.Title);
+            //};
+            var furl = "https://prod-56.westeurope.logic.azure.com:443/workflows/7b826ecd39634e89b1b22cef54db749f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=4Umz1p7kzWD3Y0KyMSkIFPTJyncSpN1k3WsF31lO8gw";
+            sagerItemid fdata = new sagerItemid()
+            {
+                Itemid = itemid
+            };
+            HttpRequestMessage requestMsg = new HttpRequestMessage(new HttpMethod("POST"), furl);
+            requestMsg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            requestMsg.Content = new StringContent(JsonConvert.SerializeObject(fdata), Encoding.UTF8, "application/json");
+            HttpResponseMessage response = _saveHttpClient.SendAsync(requestMsg).Result;
+            var content = await response.Content.ReadAsStringAsync();
+            var json = JObject.Parse(content);
+            var value = json["value"].ToList();
+            string foldername = string.Empty;
+            foreach (var item in value)
+            {
+                foldername = item["{Name}"].ToString();
+            }
+            return foldername;
+        }
+    }
+
+    public class sagerItemid
+    {
+        [JsonProperty(PropertyName = "itemid")]
+        public string Itemid { get; set; }
     }
 }
