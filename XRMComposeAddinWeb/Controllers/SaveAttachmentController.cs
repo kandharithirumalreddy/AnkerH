@@ -96,7 +96,7 @@ namespace XRMComposeAddinWeb.Controllers
                 foreach (string attachmentId in request.attachmentIds)
                 {
                     var attachment = await graphClient.Me.Messages[request.messageId].Attachments[attachmentId].Request().GetAsync() as FileAttachment;
-                    string caseFolderName = MakeFileNameValid(request.caseFolderName);
+                    string caseFolderName = request.caseFolderName;
                     if (attachment.IsInline == false)
                     {
                       // MemoryStream fileStream = new MemoryStream(attachment.ContentBytes);
