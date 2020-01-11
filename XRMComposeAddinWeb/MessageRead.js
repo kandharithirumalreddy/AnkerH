@@ -97,7 +97,7 @@
 
     function getAccessToken() {
         if (Office.context.auth !== undefined && Office.context.auth.getAccessTokenAsync !== undefined) {
-            Office.context.auth.getAccessTokenAsync(function (result) {
+            Office.context.auth.getAccessTokenAsync({ allowConsentPrompt:true},function (result) {
                 if (result.status === "succeeded") {
                     console.log("token was fetched ");
                     ssoToken = result.value;
@@ -105,7 +105,7 @@
 
                 } else if (result.error.code === 13007 || result.error.code === 13005) {
                     console.log("fetching token by force consent");
-                    Office.context.auth.getAccessTokenAsync({ forceConsent: true }, function (result) {
+                    Office.context.auth.getAccessTokenAsync({ allowSignInPrompt: true }, function (result) {
                         if (result.status === "succeeded") {
                             console.log("token was fetched");
                             ssoToken = result.value;
