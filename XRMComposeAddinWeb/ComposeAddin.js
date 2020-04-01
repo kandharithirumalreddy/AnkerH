@@ -31,36 +31,95 @@
                 var selectedCase = $("#drpcases").find("option:selected").val();
                 var selectedCat = $("#drpcategories").find("option:selected").val();
 
-                if (selectedCase.length <= 0 || selectedCat.length <= 0 || msgSubject.length<=0) {
+                if (selectedCase.length <= 0 || selectedCat.length <= 0) {
                     $("#afailure").text("Please select a case and category or a subject is missing").css("display", "block");
                     return false;
                 }
 
-                var newSubject = msgSubject + " ID" + selectedCase + ", Cat" + selectedCat;
-                Office.context.mailbox.item.subject.setAsync(newSubject, function (asyncResult) {
-                    if (asyncResult.status === "failed") {
-                        console.log("Action failed with error: " + asyncResult.error.message);
-                        $("#afailure").text("Case ID not appended to the subject").css("display", "block");
+                //var newSubject = msgSubject + " ID" + selectedCase + ", Cat" + selectedCat;
+                //Office.context.mailbox.item.subject.setAsync(newSubject, function (asyncResult) {
+                //    if (asyncResult.status === "failed") {
+                //        console.log("Action failed with error: " + asyncResult.error.message);
+                //        $("#afailure").text("Case ID not appended to the subject").css("display", "block");
+                //    } else {
+                //        console.log("Action Subject appended");
+                //        Office.context.mailbox.item.bcc.setAsync(mailRecepients, function (result) {
+                //            if (result.error) {
+                //                console.log(result.error);
+                //                $("#afailure").text("Failure while adding the bcc").css("display", "block");
+                //            } else {
+                //                console.log("Recipients added to the bcc");
+                //                Office.context.ui.closeContainer();
+                //            }
+                //        });
+                //    }
+                //});
+
+                var bodyhtml = `<div style="margin-left:95%;font-size:1px;display:none"><span hidden>###AHC-REF-ID${selectedCase}-CAT${selectedCat}###</span></div>`;
+                var bodytxt = `###AHC-REF-ID${selectedCase}-CAT${selectedCat}###`;
+                console.log("add to body3");
+                Office.context.mailbox.item.body.getTypeAsync(function(result){
+                    if (result.status === Office.AsyncResultStatus.Failed) {
+                        console.log(result.error.message);
                     } else {
-                        console.log("Action Subject appended");
-                        Office.context.mailbox.item.bcc.setAsync(mailRecepients, function (result) {
-                            if (result.error) {
-                                console.log(result.error);
-                                $("#afailure").text("Failure while adding the bcc").css("display", "block");
-                            } else {
-                                console.log("Recipients added to the bcc");
-                                Office.context.ui.closeContainer();
-                            }
-                        });
+                        console.log("email type: ", result.value);
+                        if (result.value === 'html') {
+                            //this._mail.body.setSelectedDataAsync
+                            Office.context.mailbox.item.body.prependAsync(
+                                bodyhtml,
+                                {
+                                    coercionType: Office.CoercionType.Html,
+                                    asyncContext: { var3: 1, var4: 2 }
+                                },
+                                function(asyncResult){
+                                    if (asyncResult.status ===
+                                        Office.AsyncResultStatus.Failed) {
+                                        console.log(asyncResult.error.message);
+                                    }
+                                    else {
+                                        Office.context.mailbox.item.bcc.setAsync(mailRecepients, function(bccresult){
+                                            if (bccresult.error) {
+                                                console.log(bccresult.error);
+                                            } else {
+                                                console.log("Recipients added to the bcc");
+                                                Office.context.ui.closeContainer();
+                                            }
+                                        });
+                                    }
+                                });
+                        } else {
+                            Office.context.mailbox.item.body.prependAsync(
+                                bodytxt,
+                                {
+                                    coercionType: Office.CoercionType.Text,
+                                    asyncContext: { var3: 1, var4: 2 }
+                                },
+                                function(asyncResult){
+                                    if (asyncResult.status ===
+                                        Office.AsyncResultStatus.Failed) {
+                                        console.log(asyncResult.error.message);
+                                    }
+                                    else {
+                                        this._mail.bcc.setAsync(mailRecepients, function(bccresult){
+                                            if (bccresult.error) {
+                                                console.log(bccresult.error);
+                                            } else {
+                                                console.log("Recipients added to the bcc");
+                                                Office.context.ui.closeContainer();
+                                            }
+                                        });
+                                    }
+                                });
+                        }
                     }
                 });
 
             });
             
-            var item = Office.context.mailbox.item;
-            item.subject.getAsync(function (result) {
-                msgSubject = result.value;
-            });
+            //var item = Office.context.mailbox.item;
+            //item.subject.getAsync(function (result) {
+            //    msgSubject = result.value;
+            //});
         });
     };
 
