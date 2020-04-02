@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -23,6 +23,8 @@ namespace XRMComposeAddinWeb.Controllers
         // GET api/<controller>
         public async Task<IHttpActionResult> Get(string status)
         {
+      GetUserDefaultConfigController con = new GetUserDefaultConfigController();
+      var res = con.Get("spa@ankerh.dk");
             if (Request.Headers.Contains("Authorization"))
             {
                 // Request contains bearer token, validate it

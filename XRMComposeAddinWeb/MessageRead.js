@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   "use strict";
 
     var messageBanner;
@@ -428,5 +428,95 @@
         } else {
             mailMode = "In";
         }
-    }  
+    }
+  function getUserInfo(token) {
+
+    $.ajax({
+      type: "GET",
+      url: "api/GetUserDefaultCon",
+      headers: {
+        "Authorization": "Bearer " + token
+      },
+      contentType: "application/json; charset=utf-8"
+    }).done(function (data) {
+      console.log("Fetched the User data");
+      $.each(data, function (index, value) {
+        //$("#drpcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+        // $("#drpstatus").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+        // $("#drpcategory").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+        UsersMail = "spa@ankherh.dk";
+
+      });
+      $(".loader").css("display", "none");
+    }).fail(function (error) {
+      console.log("Fail to fetch cases");
+      console.log(error);
+      $(".loader").css("display", "none");
+    });
+  }
+
+  function createUserInfo(token) {
+    $(".loader").css("display", "block");
+    // var item = Office.context.mailbox.item;
+    var userInfo = {
+      // Title: item.subject,
+      // CategoryLookupId: $("#drpcategories").find("option:selected").val(),
+      Title: $("#drpcases").find("option:selected").val(),
+      StatusID: $("#drpstatus").find("option:selected").val()
+
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "api/PostUserDefaultConfig",
+      headers: {
+        "Authorization": "Bearer " + ssoToken
+      },
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(userInfo)
+    }).done(function (data) {
+      console.log("Saved the User information");
+      //Office.context.ui.closeContainer();
+
+    }).fail(function (error) {
+      console.log("Fail to save the user information");
+      console.log(error);
+      $("#afailure").text("Fail to save the user").css("display", "block");
+      $(".loader").css("display", "none");
+    });
+
+
+  }
+
+  function updateUserInfo(token) {
+    $(".loader").css("display", "block");
+    // var item = Office.context.mailbox.item;
+    var userInfo = {
+      // Title: item.subject,
+      // CategoryLookupId: $("#drpcategories").find("option:selected").val(),
+      // ID: $("#drpcases").find("option:selected").val(),
+      Title: $("#drpcases").find("option:selected").val(),
+      StatusID: $("#drpstatus").find("option:selected").val()
+
+    };
+
+    $.ajax({
+      type: "PUT",
+      url: "api/UpdateUserDefaultConfig",
+      headers: {
+        "Authorization": "Bearer " + ssoToken
+      },
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(userInfo)
+    }).done(function (data) {
+      console.log("Saved the User information");
+      //Office.context.ui.closeContainer();
+
+    }).fail(function (error) {
+      console.log("Fail to save the user information");
+      console.log(error);
+      $("#afailure").text("Fail to save the user").css("display", "block");
+      $(".loader").css("display", "none");
+    });
+  }
 })();

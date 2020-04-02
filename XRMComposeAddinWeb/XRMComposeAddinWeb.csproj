@@ -507,17 +507,23 @@
     <Compile Include="Controllers\GetCaseFoldersController.cs" />
     <Compile Include="Controllers\GetCasesController.cs" />
     <Compile Include="Controllers\GetCategoryController.cs" />
+    <Compile Include="Controllers\GetUserDefaultConfigController.cs" />
+    <Compile Include="Controllers\PostUserDefaultConfigController .cs" />
     <Compile Include="Controllers\SaveAttachmentController.cs" />
     <Compile Include="Controllers\SaveEmailController.cs" />
+    <Compile Include="Controllers\UpdateUserDefaultConfigController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\CaseInfo.cs" />
     <Compile Include="Models\CategoryInfo.cs" />
+    <Compile Include="Models\CreateUserDefaultConfigInfo.cs" />
     <Compile Include="Models\FolderInfo.cs" />
+    <Compile Include="Models\GetUserDefaultConfigInfo.cs" />
     <Compile Include="Models\SaveAttachmentRequest.cs" />
     <Compile Include="Models\SaveEmailPost.cs" />
     <Compile Include="Models\SaveEmailRequest.cs" />
+    <Compile Include="Models\UpdateUserDefaultConfigInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>

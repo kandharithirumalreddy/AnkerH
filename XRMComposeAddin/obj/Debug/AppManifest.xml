@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
      Name="XRMComposeAddin"
-     ProductID="{1b27a575-2086-4fb6-95ff-31640b030c27}"
+     ProductID="{bf597352-b583-45b1-8b42-c001888100e2}"
      Version="1.0.0.0"
      SharePointMinVersion="15.0.0.0"
 >
