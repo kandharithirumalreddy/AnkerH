@@ -25,74 +25,104 @@
     <div class="container col-sm">
         <div class="alert alert-success" role="alert" id="asuccess" style="display:none"></div>
         <div class="alert alert-danger" role="alert" id="afailure" style="display:none"></div>
-        <div class="form-group">
-            <label for="drpstatus">Status</label>
-            <select class="form-control" id="drpstatus">
-                <option value="">-Vælg-</option>
-                <option value="Igangværende" selected>Igangværende</option>
-                <option value="1-5 års sager">1-5 års sager</option>
-                <option value="Afsluttet">Afsluttet</option>
-                <option value="Tilbud">Tilbud</option>
-                <option value="Projektudvikling">Projektudvikling</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label for="drpcases">Sager</label>
-            <select class="form-control" id="drpcases">
-                <option value="" selected>-Vælg-</option>
-            </select>
-            <small id="sitecollectionhelp" class="form-text text-muted">Vælg Sager</small>
-        </div>
-        <div class="form-group" id="dvSaveEmail" style="display:none">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="" id="chkSaveEmail" />
-                    Gem Email
-                </label>
+        <div class="row">
+            <div class="col-8"></div>
+            <div class="col-4">
+                <button type="button" class="btn btn-primary" id="btnconfig">Config</button>
             </div>
-            <div id="dvcategory" style="display:none">
-                <label for="drpcategories">Kategori</label>
-                <select class="form-control" id="drpcategories">
-                    <option value="" selected>-Vælg-</option>
-
+        </div>
+        <div id="maincontent">
+            <div class="form-group">
+                <label for="drpstatus">Status3</label>
+                <select class="form-control" id="drpstatus">
+                    <option value="">-Vælg-</option>
+                    <option value="Igangværende" selected>Igangværende</option>
+                    <option value="1-5 års sager">1-5 års sager</option>
+                    <option value="Afsluttet">Afsluttet</option>
+                    <option value="Tilbud">Tilbud</option>
+                    <option value="Projektudvikling">Projektudvikling</option>
                 </select>
             </div>
 
-        </div>
-        <div class="form-group" id="dvSaveAttachments" style="display:none">
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" value="" id="chkSaveAttachment" />
-                    Gem Vedhæftning(er)
-                </label>
+            <div class="form-group">
+                <label for="drpcases">Sager</label>
+                <select class="form-control" id="drpcases">
+                    <option value="" selected>-Vælg-</option>
+                </select>
+                <small id="sitecollectionhelp" class="form-text text-muted">Vælg Sager</small>
             </div>
-            <div id="dvFolder" style="display:none">
-                <label for="drpfolders">Mapper</label>
-                <select class="form-control" id="drpfolders">
-                    <option value="" selected>-Vælg-</option>
-                </select>
+            <div class="form-group" id="dvSaveEmail" style="display:none">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="" id="chkSaveEmail" />
+                        Gem Email
+                    </label>
+                </div>
+                <div id="dvcategory" style="display:none">
+                    <label for="drpcategories">Kategori</label>
+                    <select class="form-control" id="drpcategories">
+                        <option value="" selected>-Vælg-</option>
 
-                <br />
-                <select class="form-control" id="drpfolders1" style="display:none">
-                    <option value="" selected>-Vælg-</option>
+                    </select>
+                </div>
 
-                </select>
-                <br />
-                <select class="form-control" id="drpfolders2" style="display:none">
-                    <option value="" selected>-Vælg-</option>
+            </div>
+            <div class="form-group" id="dvSaveAttachments" style="display:none">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox" value="" id="chkSaveAttachment" />
+                        Gem Vedhæftning(er)
+                    </label>
+                </div>
+                <div id="dvFolder" style="display:none">
+                    <label for="drpfolders">Mapper</label>
+                    <select class="form-control" id="drpfolders">
+                        <option value="" selected>-Vælg-</option>
+                    </select>
 
-                </select>
-                <br />
-                <select class="form-control" id="drpfolders3" style="display:none">
-                    <option value="" selected>-Vælg-</option>
+                    <br />
+                    <select class="form-control" id="drpfolders1" style="display:none">
+                        <option value="" selected>-Vælg-</option>
 
-                </select>
+                    </select>
+                    <br />
+                    <select class="form-control" id="drpfolders2" style="display:none">
+                        <option value="" selected>-Vælg-</option>
+
+                    </select>
+                    <br />
+                    <select class="form-control" id="drpfolders3" style="display:none">
+                        <option value="" selected>-Vælg-</option>
+
+                    </select>
+                </div>
+            </div>
+
+            <div id="savesection" style="display:none">
+                <div> <button type="submit" class="btn btn-primary float-right" id="btnSave">Gem</button></div>
             </div>
         </div>
-
-        <div id="savesection" style="display:none">
-            <div> <button type="submit" class="btn btn-primary float-right" id="btnSave">Gem</button></div>
+        <div id="configcontent" style="display:none">
+            <div class="form-group">
+                <label for="drpstatus">Config Status</label>
+                <select class="form-control" id="drpconfigstatus">
+                    <option value="">-Vælg-</option>
+                    <option value="Igangværende" selected>Igangværende</option>
+                    <option value="1-5 års sager">1-5 års sager</option>
+                    <option value="Afsluttet">Afsluttet</option>
+                    <option value="Tilbud">Tilbud</option>
+                    <option value="Projektudvikling">Projektudvikling</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="drpconfigcases">Config Sager</label>
+                <select class="form-control" id="drpconfigcases">
+                    <option value="" selected>-Vælg-</option>
+                </select>
+            </div>
+            <div id="saveConfig">
+                <div> <button type="submit" class="btn btn-primary float-right" id="btnSaveConfig">Gem Config</button></div>
+            </div>
         </div>
     </div>
 

@@ -23,8 +23,6 @@ namespace XRMComposeAddinWeb.Controllers
         // GET api/<controller>
         public async Task<IHttpActionResult> Get(string status)
         {
-      GetUserDefaultConfigController con = new GetUserDefaultConfigController();
-      var res = con.Get("spa@ankerh.dk");
             if (Request.Headers.Contains("Authorization"))
             {
                 // Request contains bearer token, validate it
@@ -99,16 +97,17 @@ namespace XRMComposeAddinWeb.Controllers
                                 return Task.FromResult(0);
                             }));
 
+                    string filterstr = "fields/Status eq '" + status + "'";
                     List<QueryOption> options = new List<QueryOption>()
                 {
-                    new QueryOption("expand","fields($select=id,title,status,billable)")
+                    new QueryOption("expand","fields($select=id,title,status,billable)"),
+                    new QueryOption("$filter",filterstr)
                 };
 
                     var lcases = await graphClient.Sites[siteId].Lists[caselistId].Items.Request(options).GetAsync();
 
                     foreach (var lcase in lcases)
                     {
-                        if (lcase.Fields.AdditionalData["Status"].ToString() == status)
                             cases.Add(new CaseInfo()
                             {
                                 Title = lcase.Fields.AdditionalData["Title"].ToString(),

@@ -6,6 +6,10 @@
     var msgbody;
     var mailMode;
     var caseFolderName;
+    var showconfig = false;
+    var userStatus = "Igangværende";
+    var userCase;
+    var userListID="-1";
 
   // The Office initialize function must be run each time a new page is loaded.
   Office.initialize = function (reason) {
@@ -24,7 +28,6 @@
             $("#savesection").css("display", "block");
             $("#chkSaveEmail").prop("checked", true);
             $("#dvcategory").css("display", "block");
-            getCategory(ssoToken);
             getCaseFolders(ssoToken, 1,"drpfolders");
           });
 
@@ -77,6 +80,18 @@
                   $(".loader").css("display", "none");
               }
           });
+
+          $("#btnconfig").click(function () {
+              if (showconfig) {
+                  $("#configcontent").css("display", "none");
+                  $("#maincontent").css("display", "block");
+                  showconfig = false;
+              } else {
+                  $("#configcontent").css("display", "block");
+                  $("#maincontent").css("display", "none");
+                  showconfig = true;
+              }
+          });
           //saveEmail(ssoToken);
 
           var item = Office.context.mailbox.item;
@@ -101,7 +116,9 @@
                 if (result.status === "succeeded") {
                     console.log("token was fetched ");
                     ssoToken = result.value;
-                    getCases(result.value, $("#drpstatus").val());
+                    //getCases(result.value, $("#drpstatus").val());
+                    getUserInfo(ssoToken);
+                    getCategory(ssoToken);
 
                 } else if (result.error.code === 13007 || result.error.code === 13005) {
                     console.log("fetching token by force consent");
@@ -109,7 +126,9 @@
                         if (result.status === "succeeded") {
                             console.log("token was fetched");
                             ssoToken = result.value;
-                            getCases(result.value, $("#drpstatus").val());
+                            //getCases(result.value, $("#drpstatus").val());
+                            getUserInfo(ssoToken);
+                            getCategory(ssoToken);
                         }
                         else {
                             console.log("No token was fetched " + result.error.code);
@@ -160,10 +179,22 @@
         }).done(function (data) {
             console.log("Fetched the Cases data");
             $("#drpcases").html("");
+            $("#drpconfigcases").html("");
             $("#drpcases").append('<option value="" selected>-Vælg-</option>');
+            $("#drpconfigcases").append('<option value="" selected>-Vælg-</option>');
             $.each(data, function(index, value){
                 $("#drpcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+                $("#drpconfigcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
             });
+            if (userListID !== "-1") {
+                $("#drpcases").val(userCase);
+                $("#dvSaveEmail").css("display", "block");
+                $("#dvSaveAttachments").css("display", "block");
+                $("#savesection").css("display", "block");
+                $("#chkSaveEmail").prop("checked", true);
+                $("#dvcategory").css("display", "block");
+                getCaseFolders(ssoToken, 1, "drpfolders");
+            }
             $(".loader").css("display", "none");
         }).fail(function (error) {
             console.log("Fail to fetch cases");
@@ -255,7 +286,7 @@
     Date.prototype.addHours = function (h) {
         this.setHours(this.getHours() + h);
         return this;
-    }
+    };
 
     function saveEmail(token) {
         $(".loader").css("display", "block");
@@ -433,7 +464,7 @@
 
     $.ajax({
       type: "GET",
-      url: "api/GetUserDefaultCon",
+        url: "api/GetUserDefaultConfig/?useremail=" + Office.context.mailbox.userProfile.emailAddress,
       headers: {
         "Authorization": "Bearer " + token
       },
@@ -441,13 +472,13 @@
     }).done(function (data) {
       console.log("Fetched the User data");
       $.each(data, function (index, value) {
-        //$("#drpcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
-        // $("#drpstatus").append('<option value="' + value.ID + '">' + value.Title + '</option>');
-        // $("#drpcategory").append('<option value="' + value.ID + '">' + value.Title + '</option>');
-        UsersMail = "spa@ankherh.dk";
-
+          userStatus = value.StatusID;
+          userCase = value.Title;
+          userListID = value.ID;
+          getCases(token, userStatus);
+          $("#drpstatus").val(userStatus);
       });
-      $(".loader").css("display", "none");
+      //$(".loader").css("display", "none");
     }).fail(function (error) {
       console.log("Fail to fetch cases");
       console.log(error);
