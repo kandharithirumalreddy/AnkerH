@@ -81,6 +81,7 @@
               }
           });
 
+         
           $("#btnconfig").click(function () {
               if (showconfig) {
                   $("#configcontent").css("display", "none");
@@ -106,6 +107,28 @@
           //    redirectUrl: authConfig.redirectUrl,
           //    scope: authConfig.scopes
           //});
+
+          $("#btnSaveConfig").click(function () {
+              if (userListID == -1) {
+                  createUserInfo(ssoToken);
+              } else if (userListID > 0) {
+                  updateUserInfo(ssoToken);
+              }
+              else {
+                  $("#afailure").text("Please select valid data for User").css("display", "block");
+                  $(".loader").css("display", "none");
+              }
+          });
+
+          $("#drpconfigcases").click(function () {
+              if ($("#drpconfigcases").val() == "selected") {
+                  getCases(ssoToken, $("#drpstatus").val());
+              }
+              else {
+                  Console.log("Already data fetched ");
+              }
+
+          });
     });
     };
 
@@ -492,8 +515,10 @@
     var userInfo = {
       // Title: item.subject,
       // CategoryLookupId: $("#drpcategories").find("option:selected").val(),
+        
       Title: $("#drpcases").find("option:selected").val(),
-      StatusID: $("#drpstatus").find("option:selected").val()
+        StatusID: $("#drpstatus").find("option:selected").val(),
+        UserMail: Office.context.mailbox.userProfile.emailAddress
 
     };
 
@@ -526,8 +551,10 @@
       // Title: item.subject,
       // CategoryLookupId: $("#drpcategories").find("option:selected").val(),
       // ID: $("#drpcases").find("option:selected").val(),
-      Title: $("#drpcases").find("option:selected").val(),
-      StatusID: $("#drpstatus").find("option:selected").val()
+        ID: userListID,
+        Title: $("#drpcases").find("option:selected").val(),
+        StatusID: $("#drpstatus").find("option:selected").val(),
+        UserMail: Office.context.mailbox.userProfile.emailAddress
 
     };
 
