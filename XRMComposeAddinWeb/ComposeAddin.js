@@ -3,7 +3,7 @@
 
     var messageBanner;
     var ssoToken;
-    var msgSubject;
+    var msgBody;
     var mailMode;
 
     // The Office initialize function must be run each time a new page is loaded.
@@ -33,6 +33,11 @@
 
                 if (selectedCase.length <= 0 || selectedCat.length <= 0) {
                     $("#afailure").text("Please select a case and category or a subject is missing").css("display", "block");
+                    return false;
+                }
+
+                if (msgBody.indexOf("###AHC-REF-ID") >= 0) {
+                    $("#afailure").text("Addin text already part of the body").css("display", "block");
                     return false;
                 }
 
@@ -116,10 +121,11 @@
 
             });
             
-            //var item = Office.context.mailbox.item;
-            //item.subject.getAsync(function (result) {
-            //    msgSubject = result.value;
-            //});
+            var item = Office.context.mailbox.item;
+            item.body.getAsync(Office.CoercionType.Html,function (result) {
+                msgBody = result.value;
+                console.log("mail body ", msgBody);
+            });
         });
     };
 
