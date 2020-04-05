@@ -1,6 +1,8 @@
+using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
@@ -80,28 +82,31 @@ namespace XRMComposeAddinWeb.Controllers
                 string[] graphScopes = { "Files.ReadWrite", "Mail.Read", "Sites.ReadWrite.All" };
 
                 AuthenticationResult authResult = await cca.AcquireTokenOnBehalfOfAsync(graphScopes, userAssertion);
+                // Initialize a Graph client
+                GraphServiceClient graphClient = new GraphServiceClient(
+                    new DelegateAuthenticationProvider(
+                        (requestMessage) =>
+                        {
+                            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+                            return Task.FromResult(0);
+                        }));
 
-
-
-                string requestUrl = string.Format("https://graph.microsoft.com/v1.0/sites/{0}/lists('{1}')/items", siteid, listId);
-        CreateUserInfo data = new CreateUserInfo()
+                var listitem = new ListItem()
                 {
-                    fields = request
+                    Fields=new FieldValueSet
+                    {
+                        AdditionalData= new Dictionary<string, object>()
+                        {
+                            {"Title",request.Title },
+                            {"StatusID",request.StatusID },
+                            {"CaseName",request.CaseName },
+                            {"UsersMail",request.UserMail }
+                        }
+                    }
                 };
-                var posdata = JsonConvert.SerializeObject(data);
-                HttpRequestMessage requestMsg = new HttpRequestMessage(new HttpMethod("POST"), requestUrl);
-                requestMsg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                requestMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
-                requestMsg.Content = new StringContent(posdata, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = _saveHttpClient.SendAsync(requestMsg).Result;
-                if (response.IsSuccessStatusCode)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest("Error while saving the item. Please contact the administrator.");
-                }
+
+                var createconfig = await graphClient.Sites[siteid].Lists[listId].Items.Request().AddAsync(listitem);
+                return Ok();
             }
             else
             {

@@ -1,6 +1,8 @@
+using Microsoft.Graph;
 using Microsoft.Identity.Client;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
@@ -80,21 +82,24 @@ namespace XRMComposeAddinWeb.Controllers
                 string[] graphScopes = { "Files.ReadWrite", "Mail.Read", "Sites.ReadWrite.All" };
 
                 AuthenticationResult authResult = await cca.AcquireTokenOnBehalfOfAsync(graphScopes, userAssertion);
+                // Initialize a Graph client
+                GraphServiceClient graphClient = new GraphServiceClient(
+                    new DelegateAuthenticationProvider(
+                        (requestMessage) =>
+                        {
+                            requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
+                            return Task.FromResult(0);
+                        }));
 
+                var updatefields = new FieldValueSet();
+                updatefields.AdditionalData = new Dictionary<string, object>();
+                updatefields.AdditionalData.Add("Title", request.Title);
+                updatefields.AdditionalData.Add("StatusID", request.StatusID);
+                updatefields.AdditionalData.Add("CaseName", request.CaseName);
 
-                string requestUrl = string.Format("https://graph.microsoft.com/v1.0/sites/{0}/lists('{1}')/items", siteid, listId);
+                var updaterequest = await graphClient.Sites[siteid].Lists[listId].Items[request.ID].Fields.Request().UpdateAsync(updatefields);
 
-                UpdateUserInfo data = new UpdateUserInfo()
-                {
-                    fields = request
-                };
-                var posdata = JsonConvert.SerializeObject(data);
-                HttpRequestMessage requestMsg = new HttpRequestMessage(new HttpMethod("PUT"), requestUrl);
-                requestMsg.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                requestMsg.Headers.Authorization = new AuthenticationHeaderValue("Bearer", authResult.AccessToken);
-                requestMsg.Content = new StringContent(posdata, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = _saveHttpClient.SendAsync(requestMsg).Result;
-                if (response.IsSuccessStatusCode)
+                if (updaterequest.AdditionalData["statusCode"].ToString() == "OK")
                 {
                     return Ok();
                 }

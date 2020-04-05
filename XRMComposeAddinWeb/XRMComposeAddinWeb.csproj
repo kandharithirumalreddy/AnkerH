@@ -199,8 +199,6 @@
     <Content Include="Content\Bootstrap\bootstrap.css.map" />
     <Content Include="Content\Bootstrap\bootstrap.min.css.map" />
     <None Include="Properties\PublishProfiles\XRMSharepointAddin1077377204 - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\XRMSharepointAddin1077377204 - Web Deploy1.pubxml" />
-    <None Include="Properties\PublishProfiles\XRMSharepointAddin1077377204 - Web Deploy2.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
@@ -210,6 +208,7 @@
     <Content Include="Images\Icon32.png" />
     <Content Include="Images\Icon64.png" />
     <Content Include="Images\Icon80.png" />
+    <Content Include="Images\PlayerSettings.png" />
     <Content Include="MessageRead.css" />
     <Content Include="MessageRead.html" />
     <Content Include="MessageRead.js" />
@@ -517,6 +516,7 @@
     </Compile>
     <Compile Include="Models\CaseInfo.cs" />
     <Compile Include="Models\CategoryInfo.cs" />
+    <Compile Include="Models\ConfigInfo.cs" />
     <Compile Include="Models\CreateUserDefaultConfigInfo.cs" />
     <Compile Include="Models\FolderInfo.cs" />
     <Compile Include="Models\GetUserDefaultConfigInfo.cs" />

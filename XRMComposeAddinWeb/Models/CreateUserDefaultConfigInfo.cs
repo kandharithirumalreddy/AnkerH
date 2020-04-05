@@ -11,6 +11,6 @@ namespace XRMComposeAddinWeb.Models
        // public string ID { get; set; }
          public string StatusID { get; set; }
         public string UserMail { get; set; }
-      
+        public string CaseName { get; set; }
     }
 }

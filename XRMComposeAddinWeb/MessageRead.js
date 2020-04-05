@@ -9,7 +9,8 @@
     var showconfig = false;
     var userStatus = "Igangværende";
     var userCase;
-    var userListID="-1";
+    var userListID = "-1";
+    var userCaseName = "-Vælg-";
 
   // The Office initialize function must be run each time a new page is loaded.
   Office.initialize = function (reason) {
@@ -18,7 +19,7 @@
           getAccessToken();
           checkForInOut();
 
-          $("#drpstatus").change(function (event) {
+          $("#drpconfigstatus").change(function (event) {
               getCases(ssoToken, this.value);
           });
 
@@ -94,6 +95,18 @@
           });
           //saveEmail(ssoToken);
 
+          $("#btnSaveConfig").click(function () {
+              if (userListID === -1) {
+                  createUserInfo(ssoToken);
+              } else if (userListID > 0) {
+                  updateUserInfo(ssoToken);
+              }
+              else {
+                  $("#afailure").text("Please select valid data for User").css("display", "block");
+                  $(".loader").css("display", "none");
+              }
+          });
+
           var item = Office.context.mailbox.item;
           item.body.getAsync('text', function (result) {
               if (result.status === 'succeeded') {
@@ -167,33 +180,35 @@
     //        });
     //}
 
-    function getCases(token,status) {
-
+    function getUserInfo(token) {
+        $(".loader").css("display", "block");
         $.ajax({
             type: "GET",
-            url: "api/GetCases/?status="+status,
+            url: "api/GetUserDefaultConfig/?useremail=" + Office.context.mailbox.userProfile.emailAddress,
             headers: {
                 "Authorization": "Bearer " + token
             },
             contentType: "application/json; charset=utf-8"
         }).done(function (data) {
-            console.log("Fetched the Cases data");
-            $("#drpcases").html("");
-            $("#drpconfigcases").html("");
-            $("#drpcases").append('<option value="" selected>-Vælg-</option>');
-            $("#drpconfigcases").append('<option value="" selected>-Vælg-</option>');
-            $.each(data, function(index, value){
-                $("#drpcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
-                $("#drpconfigcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+            console.log("Fetched the User data");
+            $.each(data, function (index, value) {
+                userStatus = value.StatusID;
+                userCase = value.Title;
+                userListID = value.ID;
+                userCaseName = value.CaseName;
             });
             if (userListID !== "-1") {
-                $("#drpcases").val(userCase);
+                getCases(token, userStatus);
+                $("#drpcases").html("");
+                $("#drpcases").append('<option value="' + userCase + '" selected>' + userCaseName + '</option>');
                 $("#dvSaveEmail").css("display", "block");
                 $("#dvSaveAttachments").css("display", "block");
                 $("#savesection").css("display", "block");
                 $("#chkSaveEmail").prop("checked", true);
                 $("#dvcategory").css("display", "block");
                 getCaseFolders(ssoToken, 1, "drpfolders");
+            } else {
+                getCases(token, userStatus);
             }
             $(".loader").css("display", "none");
         }).fail(function (error) {
@@ -203,8 +218,36 @@
         });
     }
 
+    function getCases(token, status) {
+        //$(".loader").css("display", "block");
+        $.ajax({
+            type: "GET",
+            url: "api/GetCases/?status="+status,
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            console.log("Fetched the Cases data");
+            $("#drpconfigcases").html("");
+            $("#drpconfigcases").append('<option value="" selected>-Vælg-</option>');
+            $.each(data, function(index, value){
+                $("#drpconfigcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+            });
+            if (userListID !== "-1"){
+                $("#drpconfigcases").val(userCase);
+                $("#drpconfigstatus").val(userStatus);
+            }
+            
+        }).fail(function (error) {
+            console.log("Fail to fetch cases");
+            console.log(error);
+            $(".loader").css("display", "none");
+        });
+    }
+
     function getCategory(token) {
-        $(".loader").css("display", "block");
+        //$(".loader").css("display", "block");
         $.ajax({
             type: "GET",
             url: "api/GetCategory",
@@ -213,7 +256,7 @@
             },
             contentType: "application/json; charset=utf-8"
         }).done(function (data) {
-            console.log("Fetched the Cases data");
+            console.log("Fetched the Categories data");
             $("#drpcategories").html("");
             $("#drpcategories").append('<option value="-1" selected>-Vælg-</option>');
             $.each(data, function (index, value){
@@ -267,9 +310,8 @@
             //    control = "drpfolders"+caseInfo.ID;
             //}
             ////Office.context.ui.closeContainer();
-            //$("#" + control).html("");
-            //$("#" + control).append('<option value="" selected>-Vælg-</option>');
-
+            $("#" + control).html("");
+            $("#" + control).append('<option value="" selected>-Vælg-</option>');
             $.each(data, function (index, value){
                 $("#" + control).append('<option value="' + value.Id + '">' + value.Name + '</option>');
                 caseFolderName = value.CaseFolderName;
@@ -283,6 +325,7 @@
             $(".loader").css("display", "none");
         });
     }
+
     Date.prototype.addHours = function (h) {
         this.setHours(this.getHours() + h);
         return this;
@@ -460,42 +503,18 @@
             mailMode = "In";
         }
     }
-  function getUserInfo(token) {
-
-    $.ajax({
-      type: "GET",
-        url: "api/GetUserDefaultConfig/?useremail=" + Office.context.mailbox.userProfile.emailAddress,
-      headers: {
-        "Authorization": "Bearer " + token
-      },
-      contentType: "application/json; charset=utf-8"
-    }).done(function (data) {
-      console.log("Fetched the User data");
-      $.each(data, function (index, value) {
-          userStatus = value.StatusID;
-          userCase = value.Title;
-          userListID = value.ID;
-          getCases(token, userStatus);
-          $("#drpstatus").val(userStatus);
-      });
-      //$(".loader").css("display", "none");
-    }).fail(function (error) {
-      console.log("Fail to fetch cases");
-      console.log(error);
-      $(".loader").css("display", "none");
-    });
-  }
+  
 
   function createUserInfo(token) {
-    $(".loader").css("display", "block");
     // var item = Office.context.mailbox.item;
-    var userInfo = {
-      // Title: item.subject,
-      // CategoryLookupId: $("#drpcategories").find("option:selected").val(),
-      Title: $("#drpcases").find("option:selected").val(),
-      StatusID: $("#drpstatus").find("option:selected").val()
-
-    };
+      var xcaseid = $("#drpconfigcases").find("option:selected").val();
+      var xcasename = $("#drpconfigcases").find("option:selected").text();
+      var userInfo = {
+          Title: xcaseid,
+          StatusID: $("#drpconfigstatus").find("option:selected").val(),
+          CaseName: xcasename,
+          UserMail: Office.context.mailbox.userProfile.emailAddress
+      };
 
     $.ajax({
       type: "POST",
@@ -513,22 +532,31 @@
       console.log("Fail to save the user information");
       console.log(error);
       $("#afailure").text("Fail to save the user").css("display", "block");
-      $(".loader").css("display", "none");
     });
 
-
+      $("#configcontent").css("display", "none");
+      $("#maincontent").css("display", "block");
+      showconfig = false;
+      $("#drpcases").html("");
+      $("#drpcases").append('<option value="' + xcaseid + '" selected>' + xcasename + '</option>');
+      $("#dvSaveEmail").css("display", "block");
+      $("#dvSaveAttachments").css("display", "block");
+      $("#savesection").css("display", "block");
+      $("#chkSaveEmail").prop("checked", true);
+      $("#dvcategory").css("display", "block");
+      getCaseFolders(ssoToken, 1, "drpfolders");
   }
 
   function updateUserInfo(token) {
-    $(".loader").css("display", "block");
+    //$(".loader").css("display", "block");
     // var item = Office.context.mailbox.item;
+      var xcaseid = $("#drpconfigcases").find("option:selected").val();
+      var xcasename = $("#drpconfigcases").find("option:selected").text();
     var userInfo = {
-      // Title: item.subject,
-      // CategoryLookupId: $("#drpcategories").find("option:selected").val(),
-      // ID: $("#drpcases").find("option:selected").val(),
-      Title: $("#drpcases").find("option:selected").val(),
-      StatusID: $("#drpstatus").find("option:selected").val()
-
+        Title: xcaseid,
+        StatusID: $("#drpconfigstatus").find("option:selected").val(),
+        CaseName: xcasename,
+        ID:userListID
     };
 
     $.ajax({
@@ -540,7 +568,7 @@
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify(userInfo)
     }).done(function (data) {
-      console.log("Saved the User information");
+        console.log("Saved the User information");
       //Office.context.ui.closeContainer();
 
     }).fail(function (error) {
@@ -549,5 +577,17 @@
       $("#afailure").text("Fail to save the user").css("display", "block");
       $(".loader").css("display", "none");
     });
+
+      $("#configcontent").css("display", "none");
+      $("#maincontent").css("display", "block");
+      showconfig = false;
+      $("#drpcases").html("");
+      $("#drpcases").append('<option value="' +xcaseid+ '" selected>' +xcasename+ '</option>');
+      $("#dvSaveEmail").css("display", "block");
+      $("#dvSaveAttachments").css("display", "block");
+      $("#savesection").css("display", "block");
+      $("#chkSaveEmail").prop("checked", true);
+      $("#dvcategory").css("display", "block");
+      getCaseFolders(ssoToken, 1, "drpfolders");
   }
 })();
