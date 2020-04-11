@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8" />
@@ -28,7 +28,9 @@
         <div class="row">
             <div class="col-8"></div>
             <div class="col-4">
-                <button type="button" class="btn btn-primary" id="btnconfig">Config</button>
+              <button type="button" class="btn btn-light" id="btnconfig">
+                <img src="/Images/PlayerSettings.png" alt="User Settings" title="User Settings" />
+              </button>
             </div>
         </div>
         <div id="maincontent">
@@ -60,7 +62,7 @@
                 </div>
                 <div id="dvcategory" style="display:none">
                     <label for="drpcategories">Kategori</label>
-                    <select class="form-control" id="drpcategories">
+                    <select class="form-control" id="drpcategories" disabled>
                         <option value="" selected>-Vælg-</option>
 
                     </select>
@@ -114,16 +116,25 @@
                     <option value="Projektudvikling">Projektudvikling</option>
                 </select>
             </div>
+
             <div class="form-group">
                 <label for="drpconfigcases">Config Sager</label>
                 <select class="form-control" id="drpconfigcases">
                     <option value="" selected>-Vælg-</option>
                 </select>
             </div>
-            <div id="saveConfig">
-                <div> <button type="submit" class="btn btn-primary float-right" id="btnSaveConfig">Gem Config</button></div>
+            
+            <div class="form-group">
+                <label for="drpconfigcategories">Config Kategori</label>
+                <select class="form-control" id="drpconfigcategories">
+                    <option value="" selected>-Vælg-</option>
+                </select>
             </div>
-        </div>
+
+    <div id="saveConfig">
+        <div> <button type="submit" class="btn btn-primary float-right" id="btnSaveConfig">Gem Config</button></div>
+    </div>
+</div>
     </div>
 
     <div class="loader" style="display:none"></div>

@@ -100,7 +100,8 @@ namespace XRMComposeAddinWeb.Controllers
                             {"Title",request.Title },
                             {"StatusID",request.StatusID },
                             {"CaseName",request.CaseName },
-                            {"UsersMail",request.UserMail }
+                            {"UsersMail",request.UserMail },
+                            {"Category", request.Category },
                         }
                     }
                 };

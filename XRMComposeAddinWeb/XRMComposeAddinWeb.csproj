@@ -504,6 +504,7 @@
     <Compile Include="App_Start\OpenIdConnectCachingSecurityTokenProvider.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\GetCaseFoldersController.cs" />
+    <Compile Include="Controllers\GetCaseStatusController.cs" />
     <Compile Include="Controllers\GetCasesController.cs" />
     <Compile Include="Controllers\GetCategoryController.cs" />
     <Compile Include="Controllers\GetUserDefaultConfigController.cs" />
