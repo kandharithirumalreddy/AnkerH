@@ -7,7 +7,8 @@
     var mailMode;
     var caseFolderName;
     var showconfig = false;
-    var userStatus = "Igangværende";
+  var userStatus = "Igangværende";
+ // var userStatus = "-1";
     var userCase;
     var userListID = "-1";
     var userCaseName = "-Vælg-";
@@ -21,7 +22,8 @@
           checkForInOut();
 
           $("#drpconfigstatus").change(function (event) {
-              getCases(ssoToken, this.value);
+           // getStatuses(ssoToken)
+            getCases(ssoToken, this.value);
           });
 
         $("#drpcases").change(function(event){
@@ -137,8 +139,11 @@
                     console.log("token was fetched ");
                     ssoToken = result.value;
                     //getCases(result.value, $("#drpstatus").val());
-                    getUserInfo(ssoToken);
-                    getCategory(ssoToken);
+                  
+                  getUserInfo(ssoToken);
+                  getCaseStatuses(ssoToken)
+                  getCategory(ssoToken);
+                  
 
                 } else if (result.error.code === 13007 || result.error.code === 13005) {
                     console.log("fetching token by force consent");
@@ -147,8 +152,11 @@
                             console.log("token was fetched");
                             ssoToken = result.value;
                             //getCases(result.value, $("#drpstatus").val());
-                            getUserInfo(ssoToken);
-                            getCategory(ssoToken);
+                          
+                          getUserInfo(ssoToken);
+                          getCaseStatuses(ssoToken)
+                          getCategory(ssoToken);
+                          
                         }
                         else {
                             console.log("No token was fetched " + result.error.code);
@@ -216,7 +224,7 @@
               $("#dvcategory").css("display", "block");
               
                 $("#drpconfigstatus").val(userStatus);
-                $("#drpstatus").val(userStatus);
+              //  $("#drpstatus").val(userStatus);
                 getCases(token, userStatus);
                 $("#drpcategories").val(userCategory);
                 $("#drpconfigcategories").val(userCategory);
@@ -269,6 +277,36 @@
             $(".loader").css("display", "none");
         });
     }
+    function getCaseStatuses(token) {
+    //$(".loader").css("display", "block");
+    $.ajax({
+      type: "GET",
+      url: "api/GetCaseStatus",
+      headers: {
+        "Authorization": "Bearer " + token
+      },
+      contentType: "application/json; charset=utf-8"
+    }).done(function (data) {
+      console.log("Fetched the Cases data");
+     // $("#drpstatus").html("");
+     // $("#drpstatus").append('<option value="" selected>-Vælg-</option>');
+      $("#drpconfigstatus").html("");
+      $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+      $.each(data, function (index, value) {
+       // $("#drpstatus").append('<option value="' + value + '">' + value + '</option>');
+        $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
+      });
+      if (userListID !== "-1") {
+        $("#drpconfigstatus").val(status);
+        $("#drpstatus").val(status);
+      }
+
+    }).fail(function (error) {
+      console.log("Fail to fetch cases");
+      console.log(error);
+      $(".loader").css("display", "none");
+    });
+  }
 
     function getCategory(token) {
         //$(".loader").css("display", "block");

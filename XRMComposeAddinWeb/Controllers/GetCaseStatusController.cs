@@ -62,10 +62,10 @@ namespace XRMComposeAddinWeb.Controllers
                 return BadRequest("Authorization is not valid");
             }
 
-            return await GetCaseStatus();
+            return await GetCaseStatuses();
         }
 
-        private async Task<IHttpActionResult> GetCaseStatus()
+        private async Task<IHttpActionResult> GetCaseStatuses()
         {
             try
             {

@@ -230,6 +230,37 @@
     });
   }
 
+  function getStatuses(token) {
+    //$(".loader").css("display", "block");
+    $.ajax({
+      type: "GET",
+      url: "api/GetCaseStatus",
+      headers: {
+        "Authorization": "Bearer " + token
+      },
+      contentType: "application/json; charset=utf-8"
+    }).done(function (data) {
+      console.log("Fetched the Cases data");
+      $("#drpstatus").html("");
+      $("#drpstatus").append('<option value="" selected>-Vælg-</option>');
+      $("#drpconfigstatus").html("");
+      $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+      $.each(data, function (index, value) {
+        $("#drpstatus").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+        $("#drpconfigstatus").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+      });
+      if (userListID !== "-1") {
+        $("#drpconfigstatus").val(status);
+        $("#drpstatus").val(status);
+      }
+
+    }).fail(function (error) {
+      console.log("Fail to fetch cases");
+      console.log(error);
+      $(".loader").css("display", "none");
+    });
+  }
+
   function getCategory(token) {
     //$(".loader").css("display", "block");
     $.ajax({
