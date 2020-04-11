@@ -13,5 +13,6 @@ namespace XRMComposeAddinWeb.Models
         public string UserMail { get; set; }
         public string CaseName { get; set; }
         public string Category { get; set; }
+        public string CatName { get; set; }
     }
 }

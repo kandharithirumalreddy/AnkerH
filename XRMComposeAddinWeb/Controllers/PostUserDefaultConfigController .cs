@@ -102,6 +102,7 @@ namespace XRMComposeAddinWeb.Controllers
                             {"CaseName",request.CaseName },
                             {"UsersMail",request.UserMail },
                             {"Category", request.Category },
+                            {"CatName", request.CatName }
                         }
                     }
                 };

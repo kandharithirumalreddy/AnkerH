@@ -97,6 +97,7 @@ namespace XRMComposeAddinWeb.Controllers
                 updatefields.AdditionalData.Add("StatusID", request.StatusID);
                 updatefields.AdditionalData.Add("CaseName", request.CaseName);
                 updatefields.AdditionalData.Add("Category", request.Category);
+                updatefields.AdditionalData.Add("CatName", request.CatName);
                 var updaterequest = await graphClient.Sites[siteid].Lists[listId].Items[request.ID].Fields.Request().UpdateAsync(updatefields);
 
                 if (updaterequest.AdditionalData["statusCode"].ToString() == "OK")

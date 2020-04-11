@@ -99,7 +99,7 @@ namespace XRMComposeAddinWeb.Controllers
                 string filterString = "fields/UsersMail eq '" + useremail + "'";
                 List<QueryOption> options = new List<QueryOption>()
                   {
-                  new QueryOption("$expand","fields($select=id,Title,StatusID,UsersMail,CaseName,Category)"),
+                  new QueryOption("$expand","fields($select=id,Title,StatusID,UsersMail,CaseName,Category,CatName)"),
                   new QueryOption("$filter", filterString)
                   };
 
@@ -114,9 +114,9 @@ namespace XRMComposeAddinWeb.Controllers
                         StatusID = lcase.Fields.AdditionalData["StatusID"].ToString(),
                         UserMail = lcase.Fields.AdditionalData["UsersMail"].ToString(),
                         CaseName= lcase.Fields.AdditionalData["CaseName"].ToString(),
-                       // Category = lcase.Fields.AdditionalData["Category"].ToString()
-                       Category = lcase.Fields.AdditionalData.Keys.Contains("Category") ? lcase.Fields.AdditionalData["Category"].ToString() : string.Empty,
-
+                       Category = lcase.Fields.AdditionalData["Category"].ToString(),
+                       //Category = lcase.Fields.AdditionalData.Keys.Contains("Category") ? lcase.Fields.AdditionalData["Category"].ToString() : string.Empty,
+                       CatName= lcase.Fields.AdditionalData["CatName"].ToString()
                     });
                 }
             }
