@@ -23,7 +23,7 @@
             checkForInOut();
 
             $("#drpconfigstatus").change(function (event) {
-                // getStatuses(ssoToken)
+                 //getStatuses(ssoToken)
                 getCases(ssoToken, this.value);
             });
 
@@ -87,15 +87,29 @@
             });
 
             $("#btnconfig").click(function () {
-                if (showconfig) {
-                    $("#configcontent").css("display", "none");
-                    $("#maincontent").css("display", "block");
-                    showconfig = false;
-                } else {
+                //if (showconfig) {
                     $("#configcontent").css("display", "block");
-                    $("#maincontent").css("display", "none");
-                    showconfig = true;
-                }
+                $("#maincontent").css("display", "none");
+                $("#btnback").show();
+                $("#btnconfig").hide();
+                    //showconfig = false;
+                //}
+                //else {
+                //    $("#configcontent").css("display", "block");
+                //    $("#maincontent").css("display", "none");
+                //    showconfig = true;
+                //}
+            });
+            $("#btnback").click(function () {
+                //console.log("Back button called");
+                //if (showconfig == false) {
+                   // console.log("Back button inside called")
+                    $("#configcontent").css("display", "none");
+                $("#maincontent").css("display", "block");
+                $("#btnback").hide();
+                $("#btnconfig").show();
+                   // showconfig = true;
+               // }
             });
             //saveEmail(ssoToken);
 
@@ -129,6 +143,8 @@
 
 
     function getAccessToken() {
+        $("#btnback").hide();
+        $("#btnconfig").show();
         if (Office.context.auth !== undefined && Office.context.auth.getAccessTokenAsync !== undefined) {
             Office.context.auth.getAccessTokenAsync({ allowConsentPrompt: true }, function (result) {
                 if (result.status === "succeeded") {

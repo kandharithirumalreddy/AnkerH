@@ -203,6 +203,7 @@
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Back.png" />
     <Content Include="Images\Close.png" />
     <Content Include="Images\Icon16.png" />
     <Content Include="Images\Icon32.png" />

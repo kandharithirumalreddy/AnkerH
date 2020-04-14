@@ -29,17 +29,29 @@
       });
 
       $("#btnconfig").click(function () {
-        if (showconfig) {
-          $("#configcontent").css("display", "none");
-          $("#maincontent").css("display", "block");
-          showconfig = false;
-        } else {
+        //if (showconfig) {
           $("#configcontent").css("display", "block");
           $("#maincontent").css("display", "none");
-          showconfig = true;
-        }
+          $("#btnback").show();
+          $("#btnconfig").hide();
+        //  showconfig = false;
+        //} else {
+        //  $("#configcontent").css("display", "block");
+        //  $("#maincontent").css("display", "none");
+        //  showconfig = true;
+        //}
       });
-
+        $("#btnback").click(function () {
+            //console.log("Back button called");
+            //if (showconfig == false) {
+            // console.log("Back button inside called")
+            $("#configcontent").css("display", "none");
+            $("#maincontent").css("display", "block");
+            $("#btnback").hide();
+            $("#btnconfig").show();
+            // showconfig = true;
+            // }
+        });
       $("#btnSave").click(function () {
         $("#afailure").css("display", "none");
         var mailRecepients = [{
@@ -162,7 +174,9 @@
   };
 
 
-  function getAccessToken() {
+    function getAccessToken() {
+        $("#btnback").hide();
+        $("#btnconfig").show();
     if (Office.context.auth !== undefined && Office.context.auth.getAccessTokenAsync !== undefined) {
       Office.context.auth.getAccessTokenAsync({ allowConsentPrompt: true }, function (result) {
         if (result.status === "succeeded") {
@@ -279,7 +293,32 @@
       $(".loader").css("display", "none");
     });
   }
+    function getCaseStatuses(token) {
+        //$(".loader").css("display", "block");
+        $.ajax({
+            type: "GET",
+            url: "api/GetCaseStatus",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            contentType: "application/json; charset=utf-8"
+        }).done(function (data) {
+            console.log("Fetched the Status data");
+            $("#drpconfigstatus").html("");
+            $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+            $.each(data, function (index, value) {
+                $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
+            });
+            if (userListID !== "-1") {
+                $("#drpconfigstatus").val(userStatus);
+            }
 
+        }).fail(function (error) {
+            console.log("Fail to fetch cases");
+            console.log(error);
+            $(".loader").css("display", "none");
+        });
+    }
   function getUserInfo(token) {
     $(".loader").css("display", "block");
     $.ajax({
@@ -315,7 +354,8 @@
         getCases(token, userStatus);
         }
         getCategory(token);
-        getStatuses(token);
+        //getStatuses(token);
+        getCaseStatuses(token);
       $(".loader").css("display", "none");
     }).fail(function (error) {
       console.log("Fail to fetch cases");
