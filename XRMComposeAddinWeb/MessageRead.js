@@ -23,7 +23,8 @@
             checkForInOut();
 
             $("#drpconfigstatus").change(function (event) {
-                 //getStatuses(ssoToken)
+                //getStatuses(ssoToken)
+                $(".loader").css("display", "block");
                 getCases(ssoToken, this.value);
             });
 
@@ -86,32 +87,22 @@
                 }
             });
 
-            $("#btnconfig").click(function () {
-                //if (showconfig) {
-                    $("#configcontent").css("display", "block");
-                $("#maincontent").css("display", "none");
-                $("#btnback").show();
-                $("#btnconfig").hide();
-                    //showconfig = false;
-                //}
-                //else {
-                //    $("#configcontent").css("display", "block");
-                //    $("#maincontent").css("display", "none");
-                //    showconfig = true;
-                //}
-            });
-            $("#btnback").click(function () {
-                //console.log("Back button called");
-                //if (showconfig == false) {
-                   // console.log("Back button inside called")
+            $(".btn-light").click(function () {
+                if (showconfig) {
                     $("#configcontent").css("display", "none");
-                $("#maincontent").css("display", "block");
-                $("#btnback").hide();
-                $("#btnconfig").show();
-                   // showconfig = true;
-               // }
+                    $("#maincontent").css("display", "block");
+                    $("#btnback").css("display", "none");
+                    $("#btnconfig").css("display", "block");
+                    showconfig = false;
+                } else {
+                    $("#configcontent").css("display", "block");
+                    $("#maincontent").css("display", "none");
+                    $("#btnback").css("display", "block");
+                    $("#btnconfig").css("display", "none");
+                    showconfig = true;
+                }
             });
-            //saveEmail(ssoToken);
+
 
             $("#btnSaveConfig").click(function () {
                 if (userListID === "-1") {
@@ -143,8 +134,6 @@
 
 
     function getAccessToken() {
-        $("#btnback").hide();
-        $("#btnconfig").show();
         if (Office.context.auth !== undefined && Office.context.auth.getAccessTokenAsync !== undefined) {
             Office.context.auth.getAccessTokenAsync({ allowConsentPrompt: true }, function (result) {
                 if (result.status === "succeeded") {
@@ -246,13 +235,14 @@
                 $("#drpconfigstatus").val(status);
                 $("#drpstatus").val(status);
             }
-
+            $(".loader").css("display", "none");
         }).fail(function (error) {
             console.log("Fail to fetch cases");
             console.log(error);
             $(".loader").css("display", "none");
         });
     }
+
     function getCaseStatuses(token) {
         //$(".loader").css("display", "block");
         $.ajax({
@@ -269,10 +259,8 @@
             $.each(data, function (index, value) {
                 $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
             });
-            if (userListID !== "-1") {
-                $("#drpconfigstatus").val(userStatus);
-            }
 
+            $("#drpconfigstatus").val(userStatus);
         }).fail(function (error) {
             console.log("Fail to fetch cases");
             console.log(error);
@@ -599,6 +587,8 @@
         $("#drpcategories").html("");
         $("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
         $("#dvcategory").css("display", "block");
+        $("#btnback").css("display", "none");
+        $("#btnconfig").css("display", "block");
         //  getCaseFolders(ssoToken, 1, "drpfolders");
     }
 
@@ -616,7 +606,7 @@
             CaseName: xcasename,
             ID: userListID,
             Category: xCategory,
-            CatName:xCatName
+            CatName: xCatName
         };
 
         $.ajax({
@@ -655,5 +645,7 @@
         $("#drpcategories").html("");
         $("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
         $("#drpcategories").css("display", "block");
+        $("#btnback").css("display", "none");
+        $("#btnconfig").css("display", "block");
     }
 })();
