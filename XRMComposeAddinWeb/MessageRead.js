@@ -28,7 +28,14 @@
                 getCases(ssoToken, this.value);
             });
 
+            $("#drpstatus").change(function (event) {
+                //getStatuses(ssoToken)
+                $(".loader").css("display", "block");
+                getCases(ssoToken, this.value);
+            });
+
             $("#drpcases").change(function (event) {
+                $(".loader").css("display", "block");
                 $("#dvSaveEmail").css("display", "block");
                 $("#dvSaveAttachments").css("display", "block");
                 $("#savesection").css("display", "block");
@@ -256,11 +263,15 @@
             console.log("Fetched the Status data");
             $("#drpconfigstatus").html("");
             $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+            $("#drpstatus").html("");
+            $("#drpstatus").append('<option value="" selected>-Vælg-</option>');
             $.each(data, function (index, value) {
                 $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
+                $("#drpstatus").append('<option value="' + value + '">' + value + '</option>');
             });
 
             $("#drpconfigstatus").val(userStatus);
+            $("#drpstatus").val(userStatus);
         }).fail(function (error) {
             console.log("Fail to fetch cases");
             console.log(error);
@@ -279,16 +290,16 @@
             contentType: "application/json; charset=utf-8"
         }).done(function (data) {
             console.log("Fetched the Categories data");
-            //$("#drpcategories").html("");
-            //$("#drpcategories").append('<option value="-1" selected>-Vælg-</option>');
+            $("#drpcategories").html("");
+            $("#drpcategories").append('<option value="-1" selected>-Vælg-</option>');
             $("#drpconfigcategories").html("");
             $("#drpconfigcategories").append('<option value="-1" selected>-Vælg-</option>');
             $.each(data, function (index, value) {
-                //$("#drpcategories").append('<option value="' + value.ID + '">' + value.Title + '</option>');
+                $("#drpcategories").append('<option value="' + value.ID + '">' + value.Title + '</option>');
                 $("#drpconfigcategories").append('<option value="' + value.ID + '">' + value.Title + '</option>');
             });
             if (userListID !== "-1") {
-                //$("#drpcategories").val(userCategory);
+                $("#drpcategories").val(userCategory);
                 $("#drpconfigcategories").val(userCategory);
             }
             $(".loader").css("display", "none");
@@ -576,17 +587,20 @@
         $("#configcontent").css("display", "none");
         $("#maincontent").css("display", "block");
         showconfig = false;
-        $("#drpcases").html("");
-        $("#drpcases").append('<option value="' + xcaseid + '" selected>' + xcasename + '</option>');
+        //$("#drpcases").html("");
+        //$("#drpcases").append('<option value="' + xcaseid + '" selected>' + xcasename + '</option>');
+        $("#drpcases").val(xcaseid);
         $("#dvSaveEmail").css("display", "block");
         $("#dvSaveAttachments").css("display", "block");
         $("#savesection").css("display", "block");
         $("#chkSaveEmail").prop("checked", true);
-        $("#drpstatus").html("");
-        $("#drpstatus").append('<option value="' + xStatus + '" selected>' + xStatus + '</option>');
+        //$("#drpstatus").html("");
+        //$("#drpstatus").append('<option value="' + xStatus + '" selected>' + xStatus + '</option>');
+        $("#drpstatus").val(xStatus);
         getCaseFolders(ssoToken, 1, "drpfolders");
-        $("#drpcategories").html("");
-        $("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
+        //$("#drpcategories").html("");
+        //$("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
+        $("#drpcategories").val(xCategory);
         $("#dvcategory").css("display", "block");
         $("#btnback").css("display", "none");
         $("#btnconfig").css("display", "block");
@@ -631,18 +645,21 @@
         $("#configcontent").css("display", "none");
         $("#maincontent").css("display", "block");
         showconfig = false;
-        $("#drpcases").html("");
-        $("#drpcases").append('<option value="' + xcaseid + '" selected>' + xcasename + '</option>');
+        //$("#drpcases").html("");
+        //$("#drpcases").append('<option value="' + xcaseid + '" selected>' + xcasename + '</option>');
+        $("#drpcases").val(xcaseid);
         $("#dvSaveEmail").css("display", "block");
         $("#dvSaveAttachments").css("display", "block");
         $("#savesection").css("display", "block");
         $("#chkSaveEmail").prop("checked", true);
         $("#dvcategory").css("display", "block");
         //$("#drpcategories").html("");
-        $("#drpstatus").html("");
-        $("#drpstatus").append('<option value="' + xStatus + '" selected>' + xStatus + '</option>');
-        $("#drpcategories").html("");
-        $("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
+        //$("#drpstatus").html("");
+        //$("#drpstatus").append('<option value="' + xStatus + '" selected>' + xStatus + '</option>');
+        $("#drpstatus").val(xStatus);
+        //$("#drpcategories").html("");
+        //$("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
+        $("#drpcategories").val(xCategory);
         $("#drpcategories").css("display", "block");
         $("#btnback").css("display", "none");
         $("#btnconfig").css("display", "block");
