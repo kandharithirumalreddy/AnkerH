@@ -300,6 +300,7 @@
     }
 
     function getCaseFolders(token, level, control) {
+        console.log("Getting the folders");
         $(".loader").css("display", "block");
         var title = $("#drpcases").find("option:selected").text();
         var id = $("#drpcases").find("option:selected").val();
@@ -583,13 +584,12 @@
         $("#chkSaveEmail").prop("checked", true);
         $("#drpstatus").html("");
         $("#drpstatus").append('<option value="' + xStatus + '" selected>' + xStatus + '</option>');
-        // getCaseFolders(ssoToken, 1, "drpfolders");
+        getCaseFolders(ssoToken, 1, "drpfolders");
         $("#drpcategories").html("");
         $("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
         $("#dvcategory").css("display", "block");
         $("#btnback").css("display", "none");
         $("#btnconfig").css("display", "block");
-        //  getCaseFolders(ssoToken, 1, "drpfolders");
     }
 
     function updateUserInfo(token) {
@@ -641,11 +641,11 @@
         //$("#drpcategories").html("");
         $("#drpstatus").html("");
         $("#drpstatus").append('<option value="' + xStatus + '" selected>' + xStatus + '</option>');
-        // getCaseFolders(ssoToken, 1, "drpfolders");
         $("#drpcategories").html("");
         $("#drpcategories").append('<option value="' + xCategory + '" selected>' + xCatName + '</option>');
         $("#drpcategories").css("display", "block");
         $("#btnback").css("display", "none");
         $("#btnconfig").css("display", "block");
+        getCaseFolders(ssoToken, 1, "drpfolders");
     }
 })();

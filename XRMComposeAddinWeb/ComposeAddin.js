@@ -12,6 +12,7 @@
   var userCaseName = "-Vælg-";
     var userCategory = "";
     var userCatName = "-Vælg-";
+    var outlookclient;
 
   // The Office initialize function must be run each time a new page is loaded.
   Office.initialize = function (reason) {
@@ -56,8 +57,8 @@
         var selectedCase = $("#drpcases").find("option:selected").val();
         var selectedCat = $("#drpcategories").find("option:selected").val();
 
-        if (selectedCase.length <= 0 || selectedCat.length <= 0) {
-          $("#afailure").text("Please select a case and category or a subject is missing").css("display", "block");
+        if (selectedCase.length <= 0 || selectedCat.length <= 0 || (outlookclient==="Outlook" && msgBody.length===37606)) {
+          $("#afailure").text("Please select a case and category or a body is missing").css("display", "block");
           return false;
         }
 
@@ -87,7 +88,7 @@
 
         var bodyhtml = `<div style="margin-left:95%;font-size:1px;display:none"><span hidden>###AHC-REF-ID${selectedCase}-CAT${selectedCat}###</span></div>`;
         var bodytxt = `###AHC-REF-ID${selectedCase}-CAT${selectedCat}###`;
-        console.log("add to body3");
+        //console.log("add to body3");
         Office.context.mailbox.item.body.getTypeAsync(function (result) {
           if (result.status === Office.AsyncResultStatus.Failed) {
             console.log(result.error.message);
@@ -159,11 +160,14 @@
           $(".loader").css("display", "none");
         }
       });
-      var item = Office.context.mailbox.item;
+        var item = Office.context.mailbox.item;
+        outlookclient = Office.context.mailbox.diagnostics.hostName;
       item.body.getAsync(Office.CoercionType.Html, function (result) {
         msgBody = result.value;
-        //console.log("mail body ", msgBody);
+          //console.log("mail body ", msgBody);
+          //$("#tstdiv").text("test "+msgBody.length);
       });
+        
     });
   };
 
