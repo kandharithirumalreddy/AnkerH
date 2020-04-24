@@ -114,9 +114,9 @@ namespace XRMComposeAddinWeb.Controllers
                         StatusID = lcase.Fields.AdditionalData["StatusID"].ToString(),
                         UserMail = lcase.Fields.AdditionalData["UsersMail"].ToString(),
                         CaseName= lcase.Fields.AdditionalData["CaseName"].ToString(),
-                       Category = lcase.Fields.AdditionalData["Category"].ToString(),
-                       //Category = lcase.Fields.AdditionalData.Keys.Contains("Category") ? lcase.Fields.AdditionalData["Category"].ToString() : string.Empty,
-                       CatName= lcase.Fields.AdditionalData["CatName"].ToString()
+                       //Category = lcase.Fields.AdditionalData["Category"].ToString(),
+                       Category = lcase.Fields.AdditionalData.Keys.Contains("Category") ? lcase.Fields.AdditionalData["Category"].ToString() : string.Empty,
+                       CatName= lcase.Fields.AdditionalData.Keys.Contains("CatName") ?lcase.Fields.AdditionalData["CatName"].ToString():string.Empty
                     });
                 }
             }
