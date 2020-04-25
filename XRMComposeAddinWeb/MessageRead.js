@@ -95,6 +95,7 @@
             });
 
             $(".btn-light").click(function () {
+                $("#afailure").css("display", "none");
                 if (showconfig) {
                     $("#configcontent").css("display", "none");
                     $("#maincontent").css("display", "block");
@@ -229,9 +230,9 @@
         }).done(function (data) {
             console.log("Fetched the Cases data");
             $("#drpcases").html("");
-            $("#drpcases").append('<option value="" selected>-Vælg-</option>');
+            $("#drpcases").append('<option value="-1" selected>-Vælg-</option>');
             $("#drpconfigcases").html("");
-            $("#drpconfigcases").append('<option value="" selected>-Vælg-</option>');
+            $("#drpconfigcases").append('<option value="-1" selected>-Vælg-</option>');
             $.each(data, function (index, value) {
                 $("#drpcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
                 $("#drpconfigcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
@@ -262,9 +263,9 @@
         }).done(function (data) {
             console.log("Fetched the Status data");
             $("#drpconfigstatus").html("");
-            $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+            //$("#drpconfigstatus").append('<option value="-1" selected>-Vælg-</option>');
             $("#drpstatus").html("");
-            $("#drpstatus").append('<option value="" selected>-Vælg-</option>');
+            //$("#drpstatus").append('<option value="-1" selected>-Vælg-</option>');
             $.each(data, function (index, value) {
                 $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
                 $("#drpstatus").append('<option value="' + value + '">' + value + '</option>');
@@ -315,6 +316,11 @@
         $(".loader").css("display", "block");
         var title = $("#drpcases").find("option:selected").text();
         var id = $("#drpcases").find("option:selected").val();
+
+        if (id === "-1") {
+            $(".loader").css("display", "none");
+            return;
+        }
         var foldername = "";
         if (level === 1) {
             foldername = id;
@@ -352,7 +358,7 @@
             //}
             ////Office.context.ui.closeContainer();
             $("#" + control).html("");
-            $("#" + control).append('<option value="" selected>-Vælg-</option>');
+            $("#" + control).append('<option value="-1" selected>-Vælg-</option>');
             $.each(data, function (index, value) {
                 $("#" + control).append('<option value="' + value.Id + '">' + value.Name + '</option>');
                 caseFolderName = value.CaseFolderName;
@@ -374,26 +380,38 @@
 
     function saveEmail(token) {
         $(".loader").css("display", "block");
+        $("#afailure").css("display", "none");
         var item = Office.context.mailbox.item;
-        //var gmt = new Date(item.dateTimeCreated).getTimezoneOffset();
-        // var datetimecreated = new Date(item.dateTimeCreated).toUTCString();
         var datetimecreated = new Date(item.dateTimeCreated).addHours(9);
-        //var datetimecreated = new Date(item.dateTimeModified);
+        var selectedCat = $("#drpcategories").find("option:selected").val();
+        if (selectedCat === "-1") {
+            $("#afailure").text("Category is a mandatory Field").css("display", "block");
+            $(".loader").css("display", "none");
+            return;
+        }
+
+        var selectedCase = $("#drpcases").find("option:selected").val();
+        if (selectedCase === "-1") {
+            $("#afailure").text("Cases is a mandatory Field").css("display", "block");
+            $(".loader").css("display", "none");
+            return;
+        }
+
         var emailInfo = {
             Title: item.subject,
             Message: msgbody,
             From: buildEmailAddressString(item.from),
             To: buildEmailAddressesString(item.to),
-            CategoryLookupId: $("#drpcategories").find("option:selected").val(),
+            CategoryLookupId: selectedCat,
             RelatedItemListId: "Lists/Cases",
-            RelatedItemId: $("#drpcases").find("option:selected").val(),
+            RelatedItemId: selectedCase,
             Received: datetimecreated,
             ConversationId: item.conversationId,
             ConversationTopic: item.subject,
             InOut: mailMode,
             messageid: Office.context.mailbox.convertToRestId(Office.context.mailbox.item.itemId, Office.MailboxEnums.RestVersion.v2_0)
         };
-
+        
         $.ajax({
             type: "POST",
             url: "api/SaveEmail",
@@ -437,6 +455,14 @@
         var level2 = $("#drpfolders1").find("option:selected").val();
         var level3 = $("#drpfolders2").find("option:selected").val();
         var level4 = $("#drpfolders3").find("option:selected").val();
+        //console.log(folderpath);
+        var rootfolderid = $("#drpfolders").find("option:selected").val();
+        if (rootfolderid === "-1") {
+            Office.context.ui.closeContainer();
+            //$("#afailure").text("Case folder needs to be selected").css("display", "block");
+            //$(".loader").css("display", "none");
+            return;
+        }
 
         if (level2.length > 1) {
             folderpath = folderpath + "/" + $("#drpfolders1").find("option:selected").text();

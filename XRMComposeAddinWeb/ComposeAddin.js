@@ -54,7 +54,8 @@
 
         
       $("#btnSave").click(function () {
-        $("#afailure").css("display", "none");
+          $("#afailure").css("display", "none");
+          $("#afailure").css("display", "none");
         var mailRecepients = [{
           "displayName": "",
           "emailAddress": "ankerh@emails.itsm360cloud.net"
@@ -63,7 +64,7 @@
         var selectedCase = $("#drpcases").find("option:selected").val();
         var selectedCat = $("#drpcategories").find("option:selected").val();
 
-        if (selectedCase.length <= 0 || selectedCat.length <= 0 || (outlookclient==="Outlook" && msgBody.length===37606)) {
+        if (selectedCase === "-1" || selectedCat ==="-1" || (outlookclient==="Outlook" && msgBody.length===37606)) {
           $("#afailure").text("Please select a case and category or a body is missing").css("display", "block");
           return false;
         }
@@ -225,9 +226,9 @@
     }).done(function (data) {
       console.log("Fetched the Cases data");
       $("#drpcases").html("");
-      $("#drpcases").append('<option value="" selected>-Vælg-</option>');
+      $("#drpcases").append('<option value="-1" selected>-Vælg-</option>');
       $("#drpconfigcases").html("");
-      $("#drpconfigcases").append('<option value="" selected>-Vælg-</option>');
+      $("#drpconfigcases").append('<option value="-1" selected>-Vælg-</option>');
       $.each(data, function (index, value) {
         $("#drpcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
         $("#drpconfigcases").append('<option value="' + value.ID + '">' + value.Title + '</option>');
@@ -258,7 +259,7 @@
     }).done(function (data) {
       console.log("Fetched the Status data");
       $("#drpconfigstatus").html("");
-      $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+      $("#drpconfigstatus").append('<option value="-1" selected>-Vælg-</option>');
       $.each(data, function (index, value) {
         $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
       });
@@ -316,9 +317,9 @@
         }).done(function (data) {
             console.log("Fetched the Status data");
             $("#drpconfigstatus").html("");
-            $("#drpconfigstatus").append('<option value="" selected>-Vælg-</option>');
+            //$("#drpconfigstatus").append('<option value="-1" selected>-Vælg-</option>');
             $("#drpstatus").html("");
-            $("#drpstatus").append('<option value="" selected>-Vælg-</option>');
+            //$("#drpstatus").append('<option value="-1" selected>-Vælg-</option>');
             $.each(data, function (index, value) {
                 $("#drpconfigstatus").append('<option value="' + value + '">' + value + '</option>');
                 $("#drpstatus").append('<option value="' + value + '">' + value + '</option>');
