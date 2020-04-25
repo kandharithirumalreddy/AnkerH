@@ -464,15 +464,15 @@
             return;
         }
 
-        if (level2.length > 1) {
+        if (level2!== "-1") {
             folderpath = folderpath + "/" + $("#drpfolders1").find("option:selected").text();
         }
 
-        if (level3.length > 1) {
+        if (level3 !== "-1") {
             folderpath = folderpath + "/" + $("#drpfolders2").find("option:selected").text();
         }
 
-        if (level4.length > 1) {
+        if (level4 !== "-1") {
             folderpath = folderpath + "/" + $("#drpfolders3").find("option:selected").text();
         }
 
