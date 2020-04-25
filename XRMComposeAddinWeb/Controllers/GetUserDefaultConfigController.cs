@@ -109,10 +109,12 @@ namespace XRMComposeAddinWeb.Controllers
                 {
                     userinfo.Add(new GetUserDefaultConfigInfo()
                     {
-                        Title = lcase.Fields.AdditionalData["Title"].ToString(),
-                        ID = lcase.Id,
-                        StatusID = lcase.Fields.AdditionalData["StatusID"].ToString(),
-                        UserMail = lcase.Fields.AdditionalData["UsersMail"].ToString(),
+                       // Title = lcase.Fields.AdditionalData["Title"].ToString(),
+                      Title = lcase.Fields.AdditionalData.Keys.Contains("Title") ? lcase.Fields.AdditionalData["Title"].ToString() : string.Empty,
+                      ID = lcase.Id,
+                       // StatusID = lcase.Fields.AdditionalData["StatusID"].ToString(),
+                      StatusID = lcase.Fields.AdditionalData.Keys.Contains("StatusID") ? lcase.Fields.AdditionalData["StatusID"].ToString() : string.Empty,
+                      UserMail = lcase.Fields.AdditionalData["UsersMail"].ToString(),
                         CaseName= lcase.Fields.AdditionalData["CaseName"].ToString(),
                        //Category = lcase.Fields.AdditionalData["Category"].ToString(),
                        Category = lcase.Fields.AdditionalData.Keys.Contains("Category") ? lcase.Fields.AdditionalData["Category"].ToString() : string.Empty,
